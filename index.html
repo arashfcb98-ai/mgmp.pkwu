@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard MGMP PKWU - Kab. Sambas</title>
+    <link rel="icon" type="image/jpeg" id="favicon">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Poppins & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f6f1',
+                            100: '#dcebdf',
+                            200: '#b8d6c0',
+                            300: '#8bb99a',
+                            400: '#559070',
+                            500: '#2f6b45',
+                            600: '#255a3a',
+                            700: '#1f4d2e',
+                            800: '#173b23',
+                            900: '#0f2a18',
+                        },
+                        gold: {
+                            50: '#fffbe6',
+                            100: '#fff2b3',
+                            400: '#fcd100',
+                            500: '#f6b937',
+                            600: '#b38310',
+                            700: '#80600a',
+                        },
+                        sand: {
+                            50: '#faf8f5',
+                            100: '#f3efe6',
+                            200: '#e5decb',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-heading { font-family: 'Poppins', sans-serif; }
+        .tab-content:not(.hidden) { animation: fadeUp .45s ease both; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        .visi-card { transition: transform .25s ease, box-shadow .25s ease; }
+        .visi-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px -12px rgba(15,42,24,.35); }
+        @media (prefers-reduced-motion: reduce) {
+            .tab-content:not(.hidden) { animation: none; }
+            .visi-card, .visi-card:hover { transition: none; transform: none; }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-sand-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-full flex flex-col transition-colors duration-200">
+
+    <!-- ==================== LOGIN VIEW ==================== -->
+    <div id="loginView" class="hidden fixed inset-0 z-[60] items-center justify-center p-4 overflow-y-auto bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700" role="dialog" aria-modal="true" aria-label="Masuk anggota">
+        <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-gold-400/10 blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-32 -right-24 w-[28rem] h-[28rem] rounded-full bg-gold-500/10 blur-3xl pointer-events-none"></div>
+        <div class="relative w-full max-w-md my-auto">
+            <button type="button" onclick="closeLogin()" class="absolute -top-1 right-0 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition" title="Tutup (Esc)" aria-label="Tutup">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-28 h-28 rounded-full bg-white shadow-xl shadow-brand-500/30 mb-4 transform hover:scale-105 transition-transform duration-300 overflow-hidden ring-4 ring-gold-400/80">
+                    <img class="logo-img w-full h-full object-cover" alt="Logo MGMP PKWU SMA Kabupaten Sambas">
+                </div>
+                <h1 class="text-2xl font-bold text-white">MGMP PKWU</h1>
+                <p class="text-sm text-brand-100 mt-1">SMA Kabupaten Sambas</p>
+                <div class="inline-block mt-2 px-3 py-1 bg-gold-400 text-brand-900 rounded-full text-xs font-bold">
+                    Khusus Anggota & Admin
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-8 shadow-xl border border-white/40 dark:border-slate-700/50">
+                <div class="space-y-5">
+                    <div id="loginContext" class="hidden p-3 bg-gold-50 border border-gold-400/60 text-gold-700 rounded-xl text-xs flex items-start space-x-2"></div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2" id="loginUserLabel">Username</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                <i class="fa-regular fa-user"></i>
+                            </span>
+                            <input type="text" id="loginUsername" placeholder="Masukkan username" autocomplete="username" 
+                                class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none text-sm transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                <i class="fa-solid fa-lock"></i>
+                            </span>
+                            <input type="password" id="loginPassword" placeholder="••••••••" 
+                                class="w-full pl-10 pr-10 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none text-sm transition">
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 hover:text-slate-600">
+                                <i id="togglePasswordIcon" class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="text-right -mt-2"><button type="button" id="btnForgot" onclick="forgotPassword()" class="hidden text-[11px] font-semibold text-brand-600 hover:underline">Lupa kata sandi?</button></div>
+                    <div id="loginError" class="hidden p-3 bg-rose-50 border border-rose-200 text-rose-600 rounded-xl text-xs flex items-center space-x-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span id="loginErrorMsg">Username atau password salah!</span>
+                    </div>
+
+                    <button type="button" id="btnLoginSubmit" onclick="handleLogin()" class="w-full py-3 px-4 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl shadow-lg shadow-brand-500/30 transition duration-200 active:scale-[0.98] text-sm">
+                        Masuk
+                    </button>
+                    <button type="button" onclick="closeLogin()" class="w-full text-xs font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Kembali ke beranda tanpa masuk</button>
+                </div>
+
+                <!-- Demo Credentials -->
+                <div id="demoBlock" class="mt-6 pt-5 border-t border-slate-200 dark:border-slate-700/60 text-xs">
+                    <p class="text-slate-500 dark:text-slate-400 font-medium mb-2">Akun Uji Coba (Demo):</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="fillDemo('admin')" class="p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-lg text-left transition">
+                            <span class="font-semibold text-slate-700 dark:text-slate-200 block">Admin Sambas</span>
+                            <span class="text-[10px] text-slate-500">admin / sambas2026</span>
+                        </button>
+                        <button onclick="fillDemo('anggota')" class="p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-lg text-left transition">
+                            <span class="font-semibold text-slate-700 dark:text-slate-200 block">Anggota Guru</span>
+                            <span class="text-[10px] text-slate-500">anggota / sambas2026</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MAIN DASHBOARD VIEW ==================== -->
+    <div id="dashboardView" class="flex min-h-screen flex-col">
+        <!-- Top Navigation -->
+        <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b-2 border-gold-400">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-md shadow-brand-500/20 overflow-hidden shrink-0">
+                        <img class="logo-img w-full h-full object-cover" alt="Logo MGMP">
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-slate-900 dark:text-white leading-none">MGMP PKWU</h2>
+                        <span class="text-xs text-slate-500 dark:text-slate-400">Kabupaten Sambas</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Tabs -->
+                <nav class="hidden md:flex space-x-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition">Beranda</button>
+                    <button onclick="switchTab('profil')" id="nav-profil" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition">Visi & Misi</button>
+                    <button onclick="switchTab('hasilKerja')" id="nav-hasilKerja" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition">Ruang Kolaborasi<i class="fa-solid fa-lock lock-icon text-[9px] ml-1 opacity-60"></i></button>
+                    <button onclick="switchTab('dokumentasi')" id="nav-dokumentasi" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition">Dokumentasi</button>
+                    <button onclick="switchTab('daftarHadir')" id="nav-daftarHadir" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition">Presensi<i class="fa-solid fa-lock lock-icon text-[9px] ml-1 opacity-60"></i></button>
+                    <button onclick="switchTab('direktori')" id="nav-direktori" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition">Anggota</button>
+                    <button onclick="switchTab('userManagement')" id="nav-userManagement" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition hidden text-amber-600 dark:text-amber-400">
+                        <i class="fa-solid fa-users-gear mr-1"></i> Manajemen User
+                    </button>
+                </nav>
+
+                <!-- Profile & Theme -->
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleDarkMode()" class="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                        <i id="themeIcon" class="fa-regular fa-moon text-lg"></i>
+                    </button>
+
+                    <button id="btnLogin" onclick="openLogin()" class="flex items-center gap-2 px-4 py-2 bg-brand-700 hover:bg-brand-800 text-white text-xs font-bold rounded-xl shadow transition">
+                        <i class="fa-solid fa-right-to-bracket"></i> Masuk
+                    </button>
+                    <div id="profileBlock" class="hidden items-center space-x-3 pl-2 border-l border-slate-200 dark:border-slate-700">
+                        <div class="w-8 h-8 rounded-full bg-gold-400 text-brand-900 font-bold flex items-center justify-center text-xs shadow" id="userAvatar">A</div>
+                        <div class="hidden sm:block text-left">
+                            <div class="text-xs font-semibold text-slate-900 dark:text-white leading-tight" id="userNameDisplay">Guru PKWU</div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 font-medium" id="userRoleBadge">Anggota</span>
+                        </div>
+                        <button id="btnMyPassword" onclick="sendMyPasswordReset()" class="hidden p-2 text-slate-500 hover:text-brand-700 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition" title="Ganti kata sandi (tautan dikirim ke email)" aria-label="Ganti kata sandi">
+                            <i class="fa-solid fa-key"></i>
+                        </button>
+                        <button onclick="logout()" class="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition ml-1" title="Keluar">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Navbar -->
+            <div class="md:hidden border-t border-slate-200 dark:border-slate-800 px-2 py-2 flex justify-around overflow-x-auto text-xs">
+                <button onclick="switchTab('dashboard')" id="mobile-nav-dashboard" class="mobile-nav-btn px-2 py-1 font-medium">Beranda</button>
+                <button onclick="switchTab('profil')" id="mobile-nav-profil" class="mobile-nav-btn px-2 py-1 font-medium">Profil</button>
+                <button onclick="switchTab('hasilKerja')" id="mobile-nav-hasilKerja" class="mobile-nav-btn px-2 py-1 font-medium whitespace-nowrap">Kolaborasi<i class="fa-solid fa-lock lock-icon text-[9px] ml-1 opacity-60"></i></button>
+                <button onclick="switchTab('dokumentasi')" id="mobile-nav-dokumentasi" class="mobile-nav-btn px-2 py-1 font-medium">Galeri</button>
+                <button onclick="switchTab('daftarHadir')" id="mobile-nav-daftarHadir" class="mobile-nav-btn px-2 py-1 font-medium">Presensi<i class="fa-solid fa-lock lock-icon text-[9px] ml-1 opacity-60"></i></button>
+                <button onclick="switchTab('direktori')" id="mobile-nav-direktori" class="mobile-nav-btn px-2 py-1 font-medium">Anggota</button>
+                <button onclick="switchTab('userManagement')" id="mobile-nav-userManagement" class="mobile-nav-btn px-2 py-1 font-medium hidden text-amber-600">User</button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+            <!-- TAB 1: BERANDA -->
+            <div id="tab-dashboard" class="tab-content space-y-6">
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-900 via-brand-800 to-brand-700 text-white p-6 sm:p-8 shadow-xl">
+                    <div class="absolute bottom-0 inset-x-0 h-1.5 bg-gradient-to-r from-gold-400 via-gold-500 to-gold-600"></div>
+                    <div class="relative z-10 max-w-2xl">
+                        <span class="px-3 py-1 bg-gold-400 text-brand-900 rounded-full text-xs font-bold tracking-wide uppercase">Kabupaten Sambas, Kalimantan Barat</span>
+                        <h1 class="text-2xl sm:text-3xl font-bold mt-2 font-heading">Portal Resmi MGMP PKWU SMA</h1>
+                        <p class="mt-1 font-heading font-semibold italic text-gold-400">MGMP PKWU? Berkarya!!!</p>
+                        <p class="mt-2 text-brand-100 text-sm leading-relaxed">
+                            Pusat kolaborasi guru Prakarya dan Kewirausahaan SMA se-Kabupaten Sambas dalam berbagi Modul Ajar, Perangkat Pembelajaran Kurikulum Merdeka, serta Presensi Kegiatan.
+                        </p>
+                        <div class="mt-6 flex flex-wrap gap-3">
+                            <button onclick="switchTab('hasilKerja')" class="px-4 py-2 bg-white text-brand-800 hover:bg-brand-50 font-semibold rounded-xl text-xs shadow transition">
+                                <i class="fa-solid fa-people-group mr-1.5"></i> Buka Ruang Kolaborasi
+                            </button>
+                            <button id="btnBannerLogin" onclick="openLogin()" class="px-4 py-2 bg-gold-400 hover:bg-gold-500 text-brand-900 font-bold rounded-xl text-xs shadow transition">
+                                <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Masuk sebagai Anggota
+                            </button>
+                            <button id="btnAdminUploadBanner" onclick="openUploadModal('add')" class="hidden px-4 py-2 bg-gold-400 hover:bg-gold-500 text-brand-900 font-bold rounded-xl text-xs shadow transition">
+                                <i class="fa-solid fa-plus mr-1.5"></i> Unggah Modul Baru
+                            </button>
+                        </div>
+                    </div>
+                    <div class="absolute right-6 top-1/2 -translate-y-1/2 hidden sm:block pointer-events-none">
+                        <img class="logo-img w-40 h-40 lg:w-48 lg:h-48 rounded-full object-cover shadow-2xl ring-4 ring-white/30 opacity-95" alt="Logo MGMP">
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Total Anggota</span>
+                            <div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                                <i class="fa-solid fa-users text-sm"></i>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-2xl font-bold text-slate-900 dark:text-white" id="statUserCount">0</div>
+                        <p class="text-[10px] text-emerald-600 mt-1"><i class="fa-solid fa-check"></i> Guru Terdaftar</p>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Ruang Kolaborasi</span>
+                            <div class="w-9 h-9 rounded-xl bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center">
+                                <i class="fa-solid fa-book-bookmark text-sm"></i>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-2xl font-bold text-slate-900 dark:text-white" id="statModulCount">0</div>
+                        <p class="text-[10px] text-slate-500 mt-1">Modul, ATP, LKPD & perangkat ajar</p>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Dokumentasi</span>
+                            <div class="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                                <i class="fa-solid fa-camera text-sm"></i>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-2xl font-bold text-slate-900 dark:text-white" id="statDokCount">0</div>
+                        <p class="text-[10px] text-slate-500 mt-1">Galeri Kegiatan MGMP</p>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Arsip Presensi</span>
+                            <div class="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                                <i class="fa-solid fa-file-pdf text-sm"></i>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-2xl font-bold text-slate-900 dark:text-white" id="statPresensiCount">0</div>
+                        <p class="text-[10px] text-slate-500 mt-1">Berkas Scan PDF Kehadiran</p>
+                    </div>
+                </div>
+            
+                <!-- Visi Teaser -->
+                <div class="relative overflow-hidden rounded-2xl glass-card border border-gold-400/60 p-5 sm:p-6 shadow-sm">
+                    <div class="absolute left-0 inset-y-0 w-1.5 bg-gradient-to-b from-gold-400 to-gold-600"></div>
+                    <div class="flex items-start gap-4 pl-2">
+                        <div class="w-11 h-11 shrink-0 rounded-xl bg-brand-700 text-gold-400 flex items-center justify-center shadow"><i class="fa-solid fa-quote-left"></i></div>
+                        <div class="space-y-2">
+                            <span class="text-[11px] font-bold uppercase tracking-widest text-gold-700 dark:text-gold-400">Visi MGMP PKWU</span>
+                            <p class="font-heading font-semibold text-slate-900 dark:text-white text-sm sm:text-base leading-relaxed">
+                                MGMP Berkarya: Ruang kolaborasi guru untuk bertumbuh, berinovasi dan berkontribusi nyata pada peningkatan pembelajaran PKWU Kabupaten Sambas
+                            </p>
+                            <button onclick="switchTab('profil')" class="inline-flex items-center gap-2 text-xs font-semibold text-brand-700 dark:text-gold-400 hover:underline">
+                                Baca Visi, Misi & Tujuan <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: PROFIL (VISI, MISI, TUJUAN, STRUKTUR) -->
+            <div id="tab-profil" class="tab-content hidden space-y-10">
+
+                <!-- Hero Visi -->
+                <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 text-white p-6 sm:p-10 shadow-xl">
+                    <img class="logo-img absolute -right-20 -bottom-20 w-80 h-80 rounded-full opacity-10 pointer-events-none" alt="">
+                    <div class="absolute -left-10 -top-10 w-40 h-40 rounded-full bg-gold-400/10 blur-2xl pointer-events-none"></div>
+                    <div class="relative z-10 max-w-3xl">
+                        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-400 text-brand-900 text-xs font-bold uppercase tracking-widest">
+                            <i class="fa-solid fa-eye"></i> Visi
+                        </span>
+                        <i class="fa-solid fa-quote-left text-gold-400 text-3xl mt-7 block"></i>
+                        <p class="font-heading text-xl sm:text-3xl font-semibold leading-snug mt-3">
+                            <span class="text-gold-400">MGMP Berkarya:</span> Ruang kolaborasi guru untuk bertumbuh, berinovasi dan berkontribusi nyata pada peningkatan pembelajaran PKWU Kabupaten Sambas
+                        </p>
+                        <div class="mt-8 inline-flex items-center gap-3 px-5 py-2.5 rounded-xl bg-gold-400 text-brand-900 font-heading font-bold text-sm sm:text-base shadow-lg">
+                            <i class="fa-solid fa-hammer"></i> MGMP PKWU? Berkarya!!!
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 inset-x-0 h-1.5 bg-gradient-to-r from-gold-400 via-gold-500 to-gold-600"></div>
+                </section>
+
+                <!-- Info Organisasi -->
+                <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 flex items-start gap-3">
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300 flex items-center justify-center"><i class="fa-solid fa-landmark"></i></div>
+                        <div class="text-xs"><p class="font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px]">Nama Organisasi</p><p class="font-bold text-slate-900 dark:text-white mt-0.5">MGMP Prakarya dan Kewirausahaan Kabupaten Sambas</p></div>
+                    </div>
+                    <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 flex items-start gap-3">
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300 flex items-center justify-center"><i class="fa-solid fa-map-location-dot"></i></div>
+                        <div class="text-xs"><p class="font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px]">Wilayah Kerja</p><p class="font-bold text-slate-900 dark:text-white mt-0.5">Seluruh SMA pelaksana mata pelajaran PKWU di Kabupaten Sambas</p></div>
+                    </div>
+                    <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 flex items-start gap-3">
+                        <div class="w-10 h-10 shrink-0 rounded-xl bg-gold-100 text-gold-700 flex items-center justify-center"><i class="fa-solid fa-stamp"></i></div>
+                        <div class="text-xs"><p class="font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px]">Pengesahan</p><p class="font-bold text-slate-900 dark:text-white mt-0.5">Dinas Pendidikan Prov. Kalimantan Barat<br><span class="font-mono font-medium text-[11px] text-slate-600 dark:text-slate-300">SK No. 400.3.10/1601/DIKBUD-B</span></p></div>
+                    </div>
+                </section>
+
+                <!-- Makna Visi -->
+                <section class="space-y-5">
+                    <div class="text-center max-w-2xl mx-auto">
+                        <span class="text-[11px] font-bold uppercase tracking-widest text-gold-700 dark:text-gold-400">Uraian Visi</span>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">Makna di Balik Setiap Kata</h2>
+                        <div class="mx-auto mt-3 h-1 w-16 rounded-full bg-gradient-to-r from-gold-400 to-gold-600"></div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <div class="visi-card glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="w-11 h-11 rounded-xl bg-brand-700 text-gold-400 flex items-center justify-center text-lg shadow"><i class="fa-solid fa-hammer"></i></div>
+                            <h3 class="mt-4 font-bold text-slate-900 dark:text-white">MGMP Berkarya</h3>
+                            <p class="mt-1.5 text-xs leading-relaxed text-slate-600 dark:text-slate-300">Identitas utama MGMP: tidak berhenti pada pertemuan dan diskusi, tetapi menghasilkan karya dan implementasi yang dampaknya dapat dilihat serta dirasakan.</p>
+                        </div>
+                        <div class="visi-card glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="w-11 h-11 rounded-xl bg-brand-700 text-gold-400 flex items-center justify-center text-lg shadow"><i class="fa-solid fa-people-group"></i></div>
+                            <h3 class="mt-4 font-bold text-slate-900 dark:text-white">Ruang Kolaborasi Guru</h3>
+                            <p class="mt-1.5 text-xs leading-relaxed text-slate-600 dark:text-slate-300">Wadah berkumpul dan bekerja sama antar guru PKWU. Guru tidak berjalan sendiri, melainkan saling berbagi pengetahuan, sumber daya, dan pengalaman.</p>
+                        </div>
+                        <div class="visi-card glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="w-11 h-11 rounded-xl bg-gold-400 text-brand-900 flex items-center justify-center text-lg shadow"><i class="fa-solid fa-seedling"></i></div>
+                            <h3 class="mt-4 font-bold text-slate-900 dark:text-white">Bertumbuh <span class="text-[11px] font-semibold text-gold-700 dark:text-gold-400">· Profesionalisme</span></h3>
+                            <p class="mt-1.5 text-xs leading-relaxed text-slate-600 dark:text-slate-300">Peningkatan kompetensi, pengetahuan, dan keterampilan guru secara berkelanjutan. Guru terus belajar dan mengembangkan diri.</p>
+                        </div>
+                        <div class="visi-card glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="w-11 h-11 rounded-xl bg-gold-400 text-brand-900 flex items-center justify-center text-lg shadow"><i class="fa-solid fa-lightbulb"></i></div>
+                            <h3 class="mt-4 font-bold text-slate-900 dark:text-white">Berinovasi <span class="text-[11px] font-semibold text-gold-700 dark:text-gold-400">· Kreativitas</span></h3>
+                            <p class="mt-1.5 text-xs leading-relaxed text-slate-600 dark:text-slate-300">Menciptakan metode, materi, atau solusi baru dalam pembelajaran PKWU, termasuk produk atau model kewirausahaan baru.</p>
+                        </div>
+                        <div class="visi-card glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="w-11 h-11 rounded-xl bg-gold-400 text-brand-900 flex items-center justify-center text-lg shadow"><i class="fa-solid fa-bullseye"></i></div>
+                            <h3 class="mt-4 font-bold text-slate-900 dark:text-white">Berkontribusi Nyata <span class="text-[11px] font-semibold text-gold-700 dark:text-gold-400">· Dampak</span></h3>
+                            <p class="mt-1.5 text-xs leading-relaxed text-slate-600 dark:text-slate-300">Kegiatan MGMP menghasilkan output terukur dan berdampak positif, misalnya peningkatan kualitas siswa, metode ajar baru, atau produk kewirausahaan.</p>
+                        </div>
+                        <div class="visi-card glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="w-11 h-11 rounded-xl bg-brand-700 text-gold-400 flex items-center justify-center text-lg shadow"><i class="fa-solid fa-school"></i></div>
+                            <h3 class="mt-4 font-bold text-slate-900 dark:text-white">Pembelajaran PKWU Kab. Sambas</h3>
+                            <p class="mt-1.5 text-xs leading-relaxed text-slate-600 dark:text-slate-300">Fokus dampak MGMP: peningkatan pembelajaran PKWU di seluruh Kabupaten Sambas, mulai dari kompetensi guru, inovasi di kelas, hingga karya nyata yang dirasakan peserta didik.</p>
+                        </div>
+                    </div>
+                    <div class="rounded-2xl border-l-4 border-gold-500 bg-gold-50 dark:bg-gold-400/10 p-5 text-sm leading-relaxed text-slate-700 dark:text-slate-200">
+                        <span class="font-heading font-bold text-brand-800 dark:text-gold-400">Inti Visi:</span>
+                        menjadikan MGMP PKWU motor penggerak yang aktif dan produktif, tempat para guru bekerja sama untuk terus bertumbuh dan berinovasi, sehingga berdampak nyata pada peningkatan pembelajaran PKWU di seluruh Kabupaten Sambas.
+                    </div>
+                </section>
+
+                <!-- Misi & Tujuan -->
+                <section class="space-y-5">
+                    <div class="text-center max-w-2xl mx-auto">
+                        <span class="text-[11px] font-bold uppercase tracking-widest text-gold-700 dark:text-gold-400">Misi & Tujuan</span>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">Empat Misi, Tujuh Tujuan Terukur</h2>
+                        <div class="mx-auto mt-3 h-1 w-16 rounded-full bg-gradient-to-r from-gold-400 to-gold-600"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <!-- Misi 1 -->
+                        <article class="visi-card relative overflow-hidden glass-card rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="h-1.5 bg-gradient-to-r from-gold-400 to-gold-600"></div>
+                            <div class="p-5 sm:p-6">
+                                <div class="flex items-start gap-4">
+                                    <span class="font-heading text-5xl font-bold leading-none text-gold-400">1</span>
+                                    <div>
+                                        <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-brand-600 dark:text-brand-300"><i class="fa-solid fa-chalkboard-user"></i> Peningkatan Kompetensi</div>
+                                        <h3 class="mt-1 font-bold text-slate-900 dark:text-white leading-snug">Meningkatkan kompetensi guru PKWU melalui program pengembangan profesional berkelanjutan</h3>
+                                    </div>
+                                </div>
+                                <div class="mt-5 space-y-3">
+                                    <div class="rounded-xl bg-brand-50 dark:bg-brand-900/30 p-3.5">
+                                        <p class="text-xs font-bold text-brand-800 dark:text-brand-200"><i class="fa-solid fa-circle-check text-gold-600 mr-1.5"></i>Meningkatkan Persentase Guru PKWU yang Berkompeten</p>
+                                        <p class="mt-1 text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">Meningkatnya rata-rata kompetensi pedagogik dan profesional guru PKWU se-Kabupaten Sambas dalam satu periode kepengurusan melalui pelatihan dan workshop yang terstruktur.</p>
+                                    </div>
+                                    <div class="rounded-xl bg-brand-50 dark:bg-brand-900/30 p-3.5">
+                                        <p class="text-xs font-bold text-brand-800 dark:text-brand-200"><i class="fa-solid fa-circle-check text-gold-600 mr-1.5"></i>Ketersediaan Modul dan Materi Ajar PKWU yang Inovatif</p>
+                                        <p class="mt-1 text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">Menghasilkan modul atau materi/media ajar inovatif berbasis PKWU yang siap diimplementasikan dalam pembelajaran.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Misi 2 -->
+                        <article class="visi-card relative overflow-hidden glass-card rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="h-1.5 bg-gradient-to-r from-gold-400 to-gold-600"></div>
+                            <div class="p-5 sm:p-6">
+                                <div class="flex items-start gap-4">
+                                    <span class="font-heading text-5xl font-bold leading-none text-gold-400">2</span>
+                                    <div>
+                                        <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-brand-600 dark:text-brand-300"><i class="fa-solid fa-handshake"></i> Kolaborasi & Ekosistem</div>
+                                        <h3 class="mt-1 font-bold text-slate-900 dark:text-white leading-snug">Mengaktifkan jejaring kolaborasi antara guru, sekolah, industri/UMKM dan Dinas Pendidikan untuk penguatan ekosistem kewirausahaan</h3>
+                                    </div>
+                                </div>
+                                <div class="mt-5 space-y-3">
+                                    <div class="rounded-xl bg-brand-50 dark:bg-brand-900/30 p-3.5">
+                                        <p class="text-xs font-bold text-brand-800 dark:text-brand-200"><i class="fa-solid fa-circle-check text-gold-600 mr-1.5"></i>Optimalisasi Peran MGMP PKWU Kab. Sambas</p>
+                                        <p class="mt-1 text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">Berfungsinya MGMP PKWU sebagai pusat informasi, konsultasi, dan pengembangan program kewirausahaan yang diakui dan didukung Dinas Pendidikan Kabupaten Sambas.</p>
+                                    </div>
+                                    <div class="rounded-xl bg-brand-50 dark:bg-brand-900/30 p-3.5">
+                                        <p class="text-xs font-bold text-brand-800 dark:text-brand-200"><i class="fa-solid fa-circle-check text-gold-600 mr-1.5"></i>Membentuk Kemitraan Strategis</p>
+                                        <p class="mt-1 text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">Terjalinnya kemitraan strategis dengan industri/UMKM lokal di Kabupaten Sambas sebagai mitra mentor, ahli, dan fasilitator praktik kerja siswa/guru.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Misi 3 -->
+                        <article class="visi-card relative overflow-hidden glass-card rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="h-1.5 bg-gradient-to-r from-gold-400 to-gold-600"></div>
+                            <div class="p-5 sm:p-6">
+                                <div class="flex items-start gap-4">
+                                    <span class="font-heading text-5xl font-bold leading-none text-gold-400">3</span>
+                                    <div>
+                                        <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-brand-600 dark:text-brand-300"><i class="fa-solid fa-lightbulb"></i> Inovasi & Produk</div>
+                                        <h3 class="mt-1 font-bold text-slate-900 dark:text-white leading-snug">Mendorong inovasi dalam pembelajaran dan pengembangan produk kewirausahaan</h3>
+                                    </div>
+                                </div>
+                                <div class="mt-5 space-y-3">
+                                    <div class="rounded-xl bg-brand-50 dark:bg-brand-900/30 p-3.5">
+                                        <p class="text-xs font-bold text-brand-800 dark:text-brand-200"><i class="fa-solid fa-circle-check text-gold-600 mr-1.5"></i>Penciptaan Inovasi Pembelajaran</p>
+                                        <p class="mt-1 text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">Menghasilkan dan menerapkan model, metode, dan strategi pembelajaran PKWU yang inovatif di sekolah.</p>
+                                    </div>
+                                    <div class="rounded-xl bg-brand-50 dark:bg-brand-900/30 p-3.5">
+                                        <p class="text-xs font-bold text-brand-800 dark:text-brand-200"><i class="fa-solid fa-circle-check text-gold-600 mr-1.5"></i>Pengembangan Produk Kewirausahaan Peserta Didik</p>
+                                        <p class="mt-1 text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">Mendorong terciptanya prototipe produk kewirausahaan peserta didik yang berpotensi di pasar dan siap mengikuti pameran atau kompetisi tingkat kabupaten/provinsi.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Misi 4 -->
+                        <article class="visi-card relative overflow-hidden glass-card rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="h-1.5 bg-gradient-to-r from-gold-400 to-gold-600"></div>
+                            <div class="p-5 sm:p-6">
+                                <div class="flex items-start gap-4">
+                                    <span class="font-heading text-5xl font-bold leading-none text-gold-400">4</span>
+                                    <div>
+                                        <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-brand-600 dark:text-brand-300"><i class="fa-solid fa-trophy"></i> Karya Nyata & Dampak</div>
+                                        <h3 class="mt-1 font-bold text-slate-900 dark:text-white leading-snug">Implementasi karya nyata yang berdampak pada peningkatan kualitas pembelajaran PKWU se-Kabupaten Sambas</h3>
+                                    </div>
+                                </div>
+                                <div class="mt-5 space-y-3">
+                                    <div class="rounded-xl bg-brand-50 dark:bg-brand-900/30 p-3.5">
+                                        <p class="text-xs font-bold text-brand-800 dark:text-brand-200"><i class="fa-solid fa-circle-check text-gold-600 mr-1.5"></i>Penyelenggaraan Program Unggulan</p>
+                                        <p class="mt-1 text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">Terlaksananya minimal satu program karya nyata unggulan, yaitu Festival Kewirausahaan Siswa Sambas, yang melibatkan seluruh anggota dan pemangku kepentingan.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- Struktur Organisasi -->
+                <section class="space-y-5">
+                    <div class="text-center max-w-2xl mx-auto">
+                        <span class="text-[11px] font-bold uppercase tracking-widest text-gold-700 dark:text-gold-400">Kepengurusan Periode 2025/2027</span>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">Struktur Organisasi</h2>
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">MGMP Prakarya dan Kewirausahaan SMA Kabupaten Sambas</p>
+                        <div class="mx-auto mt-3 h-1 w-16 rounded-full bg-gradient-to-r from-gold-400 to-gold-600"></div>
+                    </div>
+
+                    <div class="glass-card rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 sm:p-8">
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-3xl">
+                                <div class="rounded-xl border border-dashed border-brand-300 dark:border-brand-700 p-3 text-center">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-brand-600 dark:text-brand-300">Pelindung</p>
+                                    <p class="mt-0.5 text-xs font-semibold text-slate-800 dark:text-slate-100">Kepala Dinas Pendidikan dan/atau Kepala Sekolah/Pengawas terkait</p>
+                                </div>
+                                <div class="rounded-xl border border-dashed border-brand-300 dark:border-brand-700 p-3 text-center">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-brand-600 dark:text-brand-300">Pembina</p>
+                                    <p class="mt-0.5 text-xs font-semibold text-slate-800 dark:text-slate-100">Pengawas Mata Pelajaran</p>
+                                </div>
+                            </div>
+                            <div class="w-px h-5 bg-gold-500"></div>
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Pengurus Inti</p>
+                            <div class="rounded-2xl bg-gradient-to-br from-brand-800 to-brand-700 text-white px-8 py-4 text-center shadow-lg ring-2 ring-gold-400/70 min-w-[14rem]">
+                                <i class="fa-solid fa-crown text-gold-400"></i>
+                                <p class="text-[10px] font-bold uppercase tracking-widest mt-1 text-gold-400">Ketua</p>
+                                <p class="font-heading font-bold">Aras Hidayat, S.Pd</p>
+                            </div>
+                            <div class="w-px h-5 bg-gold-500"></div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl">
+                                <div class="rounded-2xl bg-brand-700 text-white px-4 py-3 text-center shadow-md">
+                                    <i class="fa-solid fa-file-signature text-gold-400"></i>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest mt-1 text-gold-400">Sekretaris</p>
+                                    <p class="font-heading font-semibold text-sm">Nur Azlin, S.Pd</p>
+                                </div>
+                                <div class="rounded-2xl bg-brand-700 text-white px-4 py-3 text-center shadow-md">
+                                    <i class="fa-solid fa-wallet text-gold-400"></i>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest mt-1 text-gold-400">Bendahara</p>
+                                    <p class="font-heading font-semibold text-sm">Elsi, S.Pd</p>
+                                </div>
+                            </div>
+                            <div class="w-px h-5 bg-gold-500"></div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full items-stretch">
+                            <div class="flex flex-col gap-3">
+                                <div class="rounded-2xl bg-gold-400 text-brand-900 px-4 py-4 text-center shadow-md">
+                                    <i class="fa-solid fa-diagram-project"></i>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest mt-1 opacity-80">Koordinator Bidang</p>
+                                    <p class="font-heading font-bold text-sm leading-snug">Perencanaan dan Pengembangan Profesionalisme (PP)</p>
+                                    <p class="mt-2 inline-block rounded-full bg-brand-900 text-gold-400 text-[11px] font-semibold px-3 py-1">Agus Setiadi, S.Pd</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800/50 p-4 flex-1">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-brand-600 dark:text-brand-300 mb-3"><i class="fa-solid fa-users mr-1.5"></i>Anggota Bidang (9)</p>
+                                    <ul class="space-y-2 text-xs text-slate-700 dark:text-slate-200">
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">1</span><span>Amrina Rosyada, S.Pd</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">2</span><span>Rizki Dwisuda, S.Pd</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">3</span><span>Wiwik Prastiyowati, S.E</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">4</span><span>Nuraini, S.Pd</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">5</span><span>Sulastri, S.Pd</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">6</span><span>Nety Indrawati, S.P</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">7</span><span>Marini, S.E</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">8</span><span>Iis Sugiarti</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">9</span><span>Mariati, S.P</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <div class="rounded-2xl bg-gold-400 text-brand-900 px-4 py-4 text-center shadow-md">
+                                    <i class="fa-solid fa-lightbulb"></i>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest mt-1 opacity-80">Koordinator Bidang</p>
+                                    <p class="font-heading font-bold text-sm leading-snug">Inovasi dan Kewirausahaan</p>
+                                    <p class="mt-2 inline-block rounded-full bg-brand-900 text-gold-400 text-[11px] font-semibold px-3 py-1">Sasmita Dewi, S.Pd</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800/50 p-4 flex-1">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-brand-600 dark:text-brand-300 mb-3"><i class="fa-solid fa-users mr-1.5"></i>Anggota Bidang (7)</p>
+                                    <ul class="space-y-2 text-xs text-slate-700 dark:text-slate-200">
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">1</span><span>Abu Hanifah, S.H</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">2</span><span>Rusdah, S.Pd</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">3</span><span>Ediawati</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">4</span><span>Malasari, S.Pd</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">5</span><span>Superdaus, S.S.T. Ars</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">6</span><span>Riki, S.Hut</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">7</span><span>Nur Fattin, S. T. P</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <div class="rounded-2xl bg-gold-400 text-brand-900 px-4 py-4 text-center shadow-md">
+                                    <i class="fa-solid fa-bullhorn"></i>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest mt-1 opacity-80">Koordinator Bidang</p>
+                                    <p class="font-heading font-bold text-sm leading-snug">Humas dan Publikasi</p>
+                                    <p class="mt-2 inline-block rounded-full bg-brand-900 text-gold-400 text-[11px] font-semibold px-3 py-1">Ramadhan, S.Pd</p>
+                                </div>
+                                <div class="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800/50 p-4 flex-1">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-brand-600 dark:text-brand-300 mb-3"><i class="fa-solid fa-users mr-1.5"></i>Anggota Bidang (6)</p>
+                                    <ul class="space-y-2 text-xs text-slate-700 dark:text-slate-200">
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">1</span><span>Apria Maulina, S.Pd., M.Pd</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">2</span><span>Ayu Andriani, S.Pd</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">3</span><span>Muhammad Reza, S.Pd</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">4</span><span>Nani Irmayani, S.Pd</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">5</span><span>Nabu. S, Hut</span></li>
+                                    <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-bold flex items-center justify-center">6</span><span>Harmita Aprilanti, S.Pd</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- TAB 2: RUANG KOLABORASI -->
+            <div id="tab-hasilKerja" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white"><i class="fa-solid fa-people-group text-gold-600 mr-2"></i>Ruang Kolaborasi</h2>
+                        <p class="text-xs text-slate-500">Tempat anggota berbagi modul ajar, ATP, LKPD, dan perangkat pembelajaran PKWU.</p>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full bg-gold-100 text-gold-700 text-[11px] font-bold"><i class="fa-solid fa-lock-open"></i> Khusus Anggota</span>
+                </div>
+                <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="relative w-full md:w-80">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                        </span>
+                        <input type="text" id="searchHasilKerja" onkeyup="filterHasilKerja()" placeholder="Cari modul, ATP, atau LKPD..." 
+                            class="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 outline-none">
+                    </div>
+
+                    <div class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 text-xs custom-scrollbar">
+                        <button onclick="setCategoryFilter('semua')" class="filter-btn px-3 py-1.5 rounded-lg bg-brand-500 text-white font-medium shrink-0" data-cat="semua">Semua</button>
+                        <button onclick="setCategoryFilter('Pengolahan')" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium shrink-0" data-cat="Pengolahan">Pengolahan</button>
+                        <button onclick="setCategoryFilter('Kerajinan')" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium shrink-0" data-cat="Kerajinan">Kerajinan</button>
+                        <button onclick="setCategoryFilter('Budidaya')" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium shrink-0" data-cat="Budidaya">Budidaya</button>
+                        <button onclick="setCategoryFilter('Rekayasa')" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium shrink-0" data-cat="Rekayasa">Rekayasa</button>
+                    </div>
+
+                    <button id="btnAdminUploadHasil" onclick="openUploadModal('add')" class="hidden w-full md:w-auto px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold rounded-xl shadow transition shrink-0">
+                        <i class="fa-solid fa-plus mr-1"></i> Tambah Modul
+                    </button>
+                </div>
+
+                <div id="hasilKerjaGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+            </div>
+
+            <!-- TAB 3: DOKUMENTASI -->
+            <div id="tab-dokumentasi" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Galeri Kegiatan MGMP PKWU Sambas</h2>
+                        <p class="text-xs text-slate-500">Dokumentasi foto kegiatan pelatihan dan pertemuan rutin guru.</p>
+                    </div>
+                    <button id="btnAdminUploadDok" onclick="openDokumentasiModal('add')" class="hidden px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold rounded-xl shadow transition flex items-center shrink-0">
+                        <i class="fa-solid fa-camera-retro mr-1.5"></i> Tambah Dokumentasi
+                    </button>
+                </div>
+                <div id="dokumentasiGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <!-- TAB 4: PRESENSI -->
+            <div id="tab-daftarHadir" class="tab-content hidden space-y-6">
+                <div class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-700/60 pb-4">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Arsip Scan Daftar Hadir Pertemuan</h2>
+                            <p class="text-xs text-slate-500">Rekapitulasi berkas presensi fisik guru peserta MGMP.</p>
+                        </div>
+                        <button id="btnAdminUploadPresensi" onclick="openPresensiModal('add')" class="hidden px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold rounded-xl shadow transition flex items-center shrink-0">
+                            <i class="fa-solid fa-file-arrow-up mr-1.5"></i> Tambah Arsip Presensi
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold uppercase tracking-wider">
+                                <tr>
+                                    <th class="p-3 rounded-l-xl">No</th>
+                                    <th class="p-3">Tanggal</th>
+                                    <th class="p-3">Agenda Kegiatan</th>
+                                    <th class="p-3">Lokasi</th>
+                                    <th class="p-3">Hadir</th>
+                                    <th class="p-3 text-center">Berkas PDF</th>
+                                    <th id="thAksiPresensi" class="p-3 rounded-r-xl text-center hidden">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="daftarHadirTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: DIREKTORI ANGGOTA -->
+            <div id="tab-direktori" class="tab-content hidden space-y-6">
+                <div class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-700/60 pb-4">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Direktori Anggota MGMP PKWU</h2>
+                            <p class="text-xs text-slate-500">Daftar resmi guru pengampu mata pelajaran PKWU SMA se-Kab. Sambas.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button id="btnAdminAddAnggota" onclick="openUserModal('add')" class="hidden px-3 py-1.5 bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold rounded-xl shadow transition flex items-center shrink-0">
+                                <i class="fa-solid fa-user-plus mr-1.5"></i> Tambah Anggota
+                            </button>
+                            <div class="relative w-full sm:w-64">
+                                <input type="text" id="searchAnggota" onkeyup="filterAnggota()" placeholder="Cari nama atau sekolah..." 
+                                    class="w-full pl-9 pr-4 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 outline-none">
+                                <i class="fa-solid fa-search absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="anggotaGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+                </div>
+            </div>
+
+            <!-- TAB 6: MANAJEMEN USER (KHUSUS ADMIN) -->
+            <div id="tab-userManagement" class="tab-content hidden space-y-6">
+                <div class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-700/60 pb-4">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-900 dark:text-white"><i class="fa-solid fa-users-gear text-amber-500 mr-2"></i> Manajemen Akun Pengguna</h2>
+                            <p class="text-xs text-slate-500">Fitur khusus Admin untuk menambah, mengedit, atau menghapus akun anggota MGMP.</p>
+                        </div>
+                        <button onclick="openUserModal('add')" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold rounded-xl shadow transition flex items-center">
+                            <i class="fa-solid fa-user-plus mr-1.5"></i> Tambah User Baru
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold uppercase tracking-wider">
+                                <tr>
+                                    <th class="p-3 rounded-l-xl">Nama & Email</th>
+                                    <th class="p-3">Asal Sekolah</th>
+                                    <th class="p-3">Posisi MGMP</th>
+                                    <th class="p-3" id="thUsername">Username</th>
+                                    <th class="p-3">Hak Akses</th>
+                                    <th class="p-3 rounded-r-xl text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+    
+    <!-- Upload / Edit Modul Modal -->
+    <div id="uploadModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-700 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
+                <h3 id="uploadModalTitle" class="font-bold text-slate-900 dark:text-white text-sm">Unggah Dokumen / Modul Ajar</h3>
+                <button onclick="closeUploadModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <input type="hidden" id="modulIdEdit">
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Judul Dokumen</label>
+                    <input type="text" id="modalTitle" placeholder="Contoh: Modul Pengolahan Jeruk Sambas" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Bidang PKWU</label>
+                        <select id="modalCategory" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                            <option value="Pengolahan">Pengolahan</option>
+                            <option value="Kerajinan">Kerajinan</option>
+                            <option value="Budidaya">Budidaya</option>
+                            <option value="Rekayasa">Rekayasa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Kelas</label>
+                        <select id="modalClass" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                            <option value="Kelas 10">Kelas 10</option>
+                            <option value="Kelas 11">Kelas 11</option>
+                            <option value="Kelas 12">Kelas 12</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Penyusun</label>
+                    <input type="text" id="modalAuthor" placeholder="Nama Guru Penyusun" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Link Google Drive</label>
+                    <input type="url" id="modalDriveLink" placeholder="https://drive.google.com/..." class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closeUploadModal()" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-medium">Batal</button>
+                    <button type="button" onclick="handleUploadSubmit()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-semibold shadow">Simpan Modul</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Add/Edit Modal (Admin Only) -->
+    <div id="userModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-700 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
+                <h3 id="userModalTitle" class="font-bold text-slate-900 dark:text-white text-sm">Tambah Anggota Baru</h3>
+                <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <input type="hidden" id="userIdEdit">
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap & Gelar</label>
+                    <input type="text" id="userNameInput" placeholder="Contoh: Rahmat Hidayat, S.Pd." class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Email</label>
+                    <input type="email" id="userEmailInput" placeholder="nama@guru.sma.id" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Asal Sekolah</label>
+                    <input type="text" id="userSchoolInput" placeholder="Contoh: SMAN 1 Sambas" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Posisi / Jabatan MGMP</label>
+                    <select id="userPositionInput" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                        <option value="Ketua">Ketua</option>
+                        <option value="Sekretaris">Sekretaris</option>
+                        <option value="Bendahara">Bendahara</option>
+                        <option value="Koordinator Bidang">Koordinator Bidang</option>
+                        <option value="Anggota Guru" selected>Anggota Guru</option>
+                    </select>
+                </div>
+                <div id="userUsernameRow">
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Username Login</label>
+                    <input type="text" id="userUsernameInput" placeholder="username_unik" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div id="userPasswordRow">
+                    <label id="userPasswordLabel" class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Password</label>
+                    <input type="password" id="userPasswordInput" placeholder="••••••••" autocomplete="new-password" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <p id="userModalHint" class="hidden text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 rounded-lg p-2.5"></p>
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Hak Akses Role</label>
+                    <select id="userRoleInput" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                        <option value="anggota">Anggota MGMP</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closeUserModal()" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-medium">Batal</button>
+                    <button type="button" onclick="handleUserSubmit()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-semibold shadow">Simpan Anggota</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Upload / Edit Dokumentasi -->
+    <div id="dokumentasiModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-700 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
+                <h3 id="dokModalTitle" class="font-bold text-slate-900 dark:text-white text-sm">Tambah Dokumentasi Kegiatan</h3>
+                <button onclick="closeDokumentasiModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <input type="hidden" id="dokIdEdit">
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Judul / Nama Kegiatan</label>
+                    <input type="text" id="dokTitle" placeholder="Contoh: Workshop Pembuatan Kerajinan Anyaman" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Tanggal Kegiatan</label>
+                    <input type="text" id="dokDate" placeholder="Contoh: 10 November 2026" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">URL Foto (Link Gambar Online / Unsplash)</label>
+                    <input type="url" id="dokImg" placeholder="https://images.unsplash.com/..." class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closeDokumentasiModal()" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-medium">Batal</button>
+                    <button type="button" onclick="handleDokumentasiSubmit()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-semibold shadow">Simpan Foto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Upload / Edit Presensi -->
+    <div id="presensiModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-700 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
+                <h3 id="presModalTitle" class="font-bold text-slate-900 dark:text-white text-sm">Tambah Arsip Scan Presensi PDF</h3>
+                <button onclick="closePresensiModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <input type="hidden" id="presIdEdit">
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Tanggal Pertemuan</label>
+                    <input type="text" id="presDate" placeholder="Contoh: 12 Desember 2026" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Agenda / Topik Kegiatan</label>
+                    <input type="text" id="presTitle" placeholder="Contoh: Evaluasi Semester Ganjil" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Lokasi Pelaksanaan</label>
+                    <input type="text" id="presLocation" placeholder="Contoh: SMAN 1 Sambas" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Jumlah Kehadiran</label>
+                    <input type="text" id="presAttendance" placeholder="Contoh: 38/40 Guru" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Link File PDF Google Drive</label>
+                    <input type="url" id="presPdfLink" placeholder="https://drive.google.com/..." class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                </div>
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closePresensiModal()" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-medium">Batal</button>
+                    <button type="button" onclick="handlePresensiSubmit()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-semibold shadow">Simpan Presensi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        /* =====================================================================
+           KONFIGURASI FIREBASE
+           Isi dengan kode dari: Firebase Console > Project settings > Your apps > Web app (</>)
+           Selama masih berisi "ISI_...", dashboard berjalan dalam MODE DEMO (data tidak tersimpan online).
+           ===================================================================== */
+        window.FIREBASE_CONFIG = {
+            apiKey: "AIzaSyAA94vbkQPTPpVjME4epMiuYINVzQxxKYA",
+            authDomain: "mgmp-pkwu-sambas.firebaseapp.com",
+            projectId: "mgmp-pkwu-sambas",
+            storageBucket: "mgmp-pkwu-sambas.firebasestorage.app",
+            messagingSenderId: "802957489103",
+            appId: "1:802957489103:web:e47284c84f3ccc0b7718ba"
+        };
+    </script>
+    <script>
+        const LOGO_SRC = "data:image/jpeg;base64,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";
+        document.querySelectorAll('.logo-img').forEach(el => el.src = LOGO_SRC);
+        document.getElementById('favicon').href = LOGO_SRC;
+
+        const USE_FIREBASE = !!(window.FIREBASE_CONFIG && window.FIREBASE_CONFIG.apiKey && !String(window.FIREBASE_CONFIG.apiKey).startsWith('ISI_'));
+        let FB = null;
+        let currentUser = null;
+        let activeCategoryFilter = 'semua';
+
+        let usersData = USE_FIREBASE ? [] : [
+            { id: 1, name: "Admin MGMP Sambas", school: "Pengurus Kabupaten", position: "Ketua", username: "admin", password: "sambas2026", role: "admin", email: "admin.pkwusambas@gmail.com" },
+            { id: 2, name: "Dra. Hj. Siti Aminah, M.Pd.", school: "SMAN 1 Sambas", position: "Sekretaris", username: "anggota", password: "sambas2026", role: "anggota", email: "siti.aminah@guru.sma.id" },
+            { id: 3, name: "Budi Santoso, S.Pd.", school: "SMAN 2 Tebas", position: "Bendahara", username: "budi", password: "sambas2026", role: "anggota", email: "budi.santoso@guru.sma.id" },
+            { id: 4, name: "Rina Wijaya, S.Pd.", school: "SMAN 1 Pemangkat", position: "Koordinator Bidang", username: "rina", password: "sambas2026", role: "anggota", email: "rina.wijaya@guru.sma.id" }
+        ];
+
+        let hasilKerjaData = USE_FIREBASE ? [] : [
+            { id: 1, title: "Modul Pengolahan Makanan Tradisional Sambas", category: "Pengolahan", classLevel: "Kelas 10", author: "Dra. Hj. Siti Aminah", school: "SMAN 1 Sambas", date: "12 Sep 2026", driveLink: "https://drive.google.com" },
+            { id: 2, title: "ATP Kerajinan Anyaman Khas Sambas", category: "Kerajinan", classLevel: "Kelas 11", author: "Budi Santoso, S.Pd.", school: "SMAN 2 Tebas", date: "05 Okt 2026", driveLink: "https://drive.google.com" }
+        ];
+
+        let dokumentasiData = USE_FIREBASE ? [] : [
+            { id: 1, title: "Workshop Kurikulum Merdeka PKWU Sambas", date: "15 Sep 2026", img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80" },
+            { id: 2, title: "Pelatihan Produk Olahan Lokal", date: "22 Agu 2026", img: "https://images.unsplash.com/photo-1528312457268-0819777f9503?auto=format&fit=crop&w=600&q=80" }
+        ];
+
+        let presensiData = USE_FIREBASE ? [] : [
+            { id: 1, date: "24 September 2026", title: "Pertemuan Rutin Bulanan", location: "Aula SMAN 1 Sambas", attendance: "38/40 Guru", pdfLink: "https://drive.google.com" },
+            { id: 2, date: "28 Agustus 2026", title: "Bimbingan Teknis Penyusunan Soal", location: "SMAN 2 Tebas", attendance: "40/40 Guru", pdfLink: "https://drive.google.com" }
+        ];
+
+
+        // ==================== HELPER ====================
+        function esc(v) {
+            return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+        function safeUrl(u) {
+            try {
+                const x = new URL(String(u || '').trim());
+                return (x.protocol === 'https:' || x.protocol === 'http:') ? esc(x.href) : '#';
+            } catch (e) { return '#'; }
+        }
+        function todayId() {
+            return new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+        let toastTimer = null;
+        function toast(msg, type) {
+            let el = document.getElementById('toast');
+            if (!el) {
+                el = document.createElement('div');
+                el.id = 'toast';
+                el.setAttribute('role', 'status');
+                document.body.appendChild(el);
+            }
+            el.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 z-[70] max-w-[90vw] px-4 py-2.5 rounded-xl text-xs font-semibold shadow-xl ' +
+                (type === 'err' ? 'bg-rose-600 text-white' : 'bg-brand-800 text-white');
+            el.innerText = msg;
+            el.style.display = 'block';
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => { el.style.display = 'none'; }, type === 'err' ? 6000 : 2500);
+        }
+        function errMsg(e) {
+            const c = (e && e.code) || '';
+            const m = {
+                'auth/invalid-credential': 'Email atau kata sandi salah.',
+                'auth/wrong-password': 'Email atau kata sandi salah.',
+                'auth/user-not-found': 'Email atau kata sandi salah.',
+                'auth/invalid-email': 'Format email tidak valid.',
+                'auth/missing-password': 'Kata sandi belum diisi.',
+                'auth/too-many-requests': 'Terlalu banyak percobaan. Coba lagi beberapa menit lagi.',
+                'auth/network-request-failed': 'Koneksi internet bermasalah.',
+                'auth/email-already-in-use': 'Email ini sudah punya akun. Jika ingin membuat ulang, hapus dulu akunnya di Firebase Console > Authentication.',
+                'auth/weak-password': 'Kata sandi minimal 6 karakter.',
+                'auth/unauthorized-domain': 'Alamat situs ini belum didaftarkan di Firebase (Authentication > Settings > Authorized domains).',
+                'auth/operation-not-supported-in-this-environment': 'Login online tidak bisa dari file yang dibuka langsung. Buka lewat alamat situs (http/https).',
+                'permission-denied': 'Anda tidak memiliki izin untuk tindakan ini.',
+                'unavailable': 'Server tidak dapat dijangkau. Periksa koneksi internet.'
+            };
+            return m[c] || ('Terjadi kesalahan: ' + ((e && e.message) || e));
+        }
+
+        // ==================== PENYIMPANAN (lokal / Firebase) ====================
+        const LOCAL_COLS = { modul: hasilKerjaData, dokumentasi: dokumentasiData, presensi: presensiData };
+        const RENDERERS = { modul: () => renderHasilKerja(), dokumentasi: () => renderDokumentasi(), presensi: () => renderDaftarHadir() };
+        let saving = false;
+
+        function newId() { return USE_FIREBASE && FB ? FB.newId() : String(Date.now()); }
+        const sameId = (a, b) => String(a) === String(b);
+
+        async function saveItem(col, item) {
+            if (USE_FIREBASE) {
+                if (!FB) { toast('Belum terhubung ke server. Coba lagi sebentar.', 'err'); return false; }
+                const { id, ...data } = item;
+                try { await FB.setDoc(col, id, data); toast('Perubahan tersimpan'); return true; }
+                catch (e) { console.error(e); toast(errMsg(e), 'err'); return false; }
+            }
+            const arr = LOCAL_COLS[col];
+            const i = arr.findIndex(d => sameId(d.id, item.id));
+            if (i > -1) arr[i] = item; else arr.unshift(item);
+            RENDERERS[col]();
+            return true;
+        }
+
+        async function removeItem(col, id) {
+            if (USE_FIREBASE) {
+                if (!FB) { toast('Belum terhubung ke server. Coba lagi sebentar.', 'err'); return false; }
+                try { await FB.delDoc(col, id); toast('Data dihapus'); return true; }
+                catch (e) { console.error(e); toast(errMsg(e), 'err'); return false; }
+            }
+            const arr = LOCAL_COLS[col];
+            const i = arr.findIndex(d => sameId(d.id, id));
+            if (i > -1) arr.splice(i, 1);
+            RENDERERS[col]();
+            return true;
+        }
+
+        // ==================== FIREBASE: SESI & REALTIME ====================
+        const profilesDocs = {};
+        const usersDocs = {};
+        const unsubs = { public: [], member: [], admin: [] };
+        const POSITION_RANK = { 'Ketua': 0, 'Sekretaris': 1, 'Bendahara': 2, 'Koordinator Bidang': 3 };
+
+        function replaceArray(arr, docs) {
+            arr.length = 0;
+            docs.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            arr.push(...docs);
+        }
+        function replaceMap(map, docs) {
+            Object.keys(map).forEach(k => delete map[k]);
+            docs.forEach(d => { map[d.id] = d; });
+        }
+        function listenErr(name) {
+            return (e) => { console.warn('Listener ' + name + ':', e && e.code); };
+        }
+        function detach(level) {
+            unsubs[level].forEach(u => { try { u(); } catch (e) { } });
+            unsubs[level] = [];
+        }
+
+        function rebuildUsers() {
+            const byProfile = {};
+            Object.values(usersDocs).forEach(u => { byProfile[u.profileId || u.id] = u; });
+            const list = Object.values(profilesDocs).map(p => {
+                const u = byProfile[p.id];
+                return { ...p, ...(u ? { uid: u.id, email: u.email, role: u.role } : {}) };
+            });
+            list.sort((a, b) => {
+                const ra = POSITION_RANK[a.position] ?? 9, rb = POSITION_RANK[b.position] ?? 9;
+                return ra - rb || String(a.name || '').localeCompare(String(b.name || ''), 'id');
+            });
+            usersData.length = 0;
+            usersData.push(...list);
+            if (currentUser) {
+                const me = list.find(p => sameId(p.id, currentUser.id));
+                if (me) { currentUser.name = me.name; currentUser.school = me.school; currentUser.position = me.position; }
+                updateHeaderUser();
+            }
+            renderAnggota();
+            renderUserManagement();
+        }
+
+        function attachPublic() {
+            unsubs.public.push(FB.listen('profiles', docs => { replaceMap(profilesDocs, docs); rebuildUsers(); }, listenErr('profiles')));
+            unsubs.public.push(FB.listen('dokumentasi', docs => { replaceArray(dokumentasiData, docs); renderDokumentasi(); }, listenErr('dokumentasi')));
+        }
+        function attachMember() {
+            unsubs.member.push(FB.listen('modul', docs => { replaceArray(hasilKerjaData, docs); renderHasilKerja(); }, listenErr('modul')));
+            unsubs.member.push(FB.listen('presensi', docs => { replaceArray(presensiData, docs); renderDaftarHadir(); }, listenErr('presensi')));
+        }
+        function attachAdmin() {
+            unsubs.admin.push(FB.listen('users', docs => { replaceMap(usersDocs, docs); rebuildUsers(); }, listenErr('users')));
+        }
+
+        async function establishSession(user) {
+            detach('member'); detach('admin');
+            if (!user) {
+                const was = !!currentUser;
+                currentUser = null;
+                hasilKerjaData.length = 0; presensiData.length = 0;
+                replaceMap(usersDocs, []);
+                rebuildUsers();
+                applyAuthState();
+                if (was) switchTab('dashboard');
+                return;
+            }
+            try {
+                const uDoc = await FB.getDoc('users', user.uid);
+                if (!uDoc) {
+                    await FB.logout();
+                    toast('Akun ini belum terdaftar sebagai anggota MGMP. Hubungi admin.', 'err');
+                    return;
+                }
+                const profileId = uDoc.profileId || user.uid;
+                const pDoc = (await FB.getDoc('profiles', profileId)) || {};
+                currentUser = {
+                    uid: user.uid, id: profileId, email: uDoc.email || user.email,
+                    role: uDoc.role === 'admin' ? 'admin' : 'anggota',
+                    name: pDoc.name || user.email, school: pDoc.school || '', position: pDoc.position || ''
+                };
+                attachMember();
+                if (currentUser.role === 'admin') attachAdmin();
+                const target = pendingTab;
+                if (!document.getElementById('loginView').classList.contains('hidden')) closeLogin();
+                applyAuthState();
+                if (target) switchTab(target);
+            } catch (e) {
+                console.error(e);
+                toast(errMsg(e), 'err');
+            }
+        }
+
+        window.onFirebaseReady = (api) => {
+            FB = api;
+            attachPublic();
+            FB.onAuth(user => establishSession(user));
+        };
+        window.onFirebaseFailed = () => {
+            toast('Tidak dapat terhubung ke Firebase. Periksa koneksi internet lalu muat ulang halaman.', 'err');
+        };
+
+        async function forgotPassword() {
+            const email = document.getElementById('loginUsername').value.trim();
+            const err = document.getElementById('loginError');
+            if (!FB) return;
+            if (!email.includes('@')) {
+                err.classList.remove('hidden');
+                document.getElementById('loginErrorMsg').innerText = 'Isi Email Anda di kolom di atas, lalu klik "Lupa kata sandi?".';
+                return;
+            }
+            try {
+                await FB.resetPassword(email);
+                err.classList.add('hidden');
+                toast('Tautan atur ulang kata sandi dikirim ke email Anda (cek juga folder Spam).');
+            } catch (e) {
+                err.classList.remove('hidden');
+                document.getElementById('loginErrorMsg').innerText = errMsg(e);
+            }
+        }
+
+        async function sendMyPasswordReset() {
+            if (!USE_FIREBASE || !FB || !currentUser) return;
+            if (!confirm('Kirim tautan ganti kata sandi ke ' + currentUser.email + ' ?')) return;
+            try { await FB.resetPassword(currentUser.email); toast('Tautan dikirim. Cek email Anda (juga folder Spam).'); }
+            catch (e) { toast(errMsg(e), 'err'); }
+        }
+
+        function configureForMode() {
+            if (!USE_FIREBASE) return;
+            document.getElementById('loginUserLabel').innerText = 'Email';
+            const inp = document.getElementById('loginUsername');
+            inp.type = 'email'; inp.placeholder = 'nama@email.com'; inp.autocomplete = 'email';
+            document.getElementById('btnForgot').classList.remove('hidden');
+            document.getElementById('demoBlock').classList.add('hidden');
+            document.getElementById('userUsernameRow').classList.add('hidden');
+            document.getElementById('thUsername').innerText = 'Akun Login';
+            document.getElementById('userPasswordLabel').innerText = 'Kata Sandi Awal (min. 6 karakter)';
+        }
+
+        const PROTECTED_TABS = ['hasilKerja', 'daftarHadir'];
+        const TAB_LABELS = { hasilKerja: 'Ruang Kolaborasi', daftarHadir: 'Presensi' };
+        let pendingTab = null;
+
+        function openLogin(message, tab) {
+            pendingTab = tab || null;
+            const v = document.getElementById('loginView');
+            v.classList.remove('hidden');
+            v.classList.add('flex');
+            document.getElementById('loginError').classList.add('hidden');
+            const ctx = document.getElementById('loginContext');
+            if (message) {
+                ctx.innerHTML = '<i class="fa-solid fa-lock mt-0.5"></i><span></span>';
+                ctx.querySelector('span').innerText = message;
+                ctx.classList.remove('hidden');
+            } else {
+                ctx.classList.add('hidden');
+            }
+            setTimeout(() => document.getElementById('loginUsername').focus(), 50);
+        }
+
+        function closeLogin() {
+            const v = document.getElementById('loginView');
+            v.classList.add('hidden');
+            v.classList.remove('flex');
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginError').classList.add('hidden');
+            pendingTab = null;
+        }
+
+        async function handleLogin() {
+            const u = document.getElementById('loginUsername').value.trim();
+            const p = document.getElementById('loginPassword').value;
+            const err = document.getElementById('loginError');
+            const showErr = (m) => { err.classList.remove('hidden'); document.getElementById('loginErrorMsg').innerText = m; };
+
+            if (USE_FIREBASE) {
+                if (!u || !p) { showErr('Email dan kata sandi wajib diisi.'); return; }
+                if (!FB) { showErr('Belum terhubung ke server. Periksa koneksi internet lalu coba lagi.'); return; }
+                const btn = document.getElementById('btnLoginSubmit');
+                const label = btn.innerText;
+                btn.disabled = true; btn.innerText = 'Memproses...';
+                try {
+                    await FB.login(u.toLowerCase(), p);   // sesi dilanjutkan oleh establishSession()
+                    err.classList.add('hidden');
+                } catch (e) {
+                    showErr(errMsg(e));
+                } finally {
+                    btn.disabled = false; btn.innerText = label;
+                }
+                return;
+            }
+
+            const found = usersData.find(item => (item.username === u || (item.email && item.email === u)) && item.password === p.trim());
+            if (found) {
+                const target = pendingTab;
+                currentUser = found;
+                closeLogin();
+                applyAuthState();
+                switchTab(target || 'dashboard');
+            } else {
+                showErr("Username atau password salah!");
+            }
+        }
+
+        function fillDemo(type) {
+            if (type === 'admin') {
+                document.getElementById('loginUsername').value = 'admin';
+                document.getElementById('loginPassword').value = 'sambas2026';
+            } else {
+                document.getElementById('loginUsername').value = 'anggota';
+                document.getElementById('loginPassword').value = 'sambas2026';
+            }
+            document.getElementById('loginError').classList.add('hidden');
+        }
+
+        function togglePasswordVisibility() {
+            const pi = document.getElementById('loginPassword');
+            const icon = document.getElementById('togglePasswordIcon');
+            pi.type = pi.type === 'password' ? 'text' : 'password';
+            icon.className = pi.type === 'password' ? 'fa-regular fa-eye' : 'fa-regular fa-eye-slash';
+        }
+
+        async function logout() {
+            if (USE_FIREBASE && FB) {
+                try { await FB.logout(); } catch (e) { toast(errMsg(e), 'err'); }
+                return;   // establishSession(null) merapikan tampilan
+            }
+            currentUser = null;
+            applyAuthState();
+            switchTab('dashboard');
+        }
+
+        function updateHeaderUser() {
+            if (!currentUser) return;
+            document.getElementById('userNameDisplay').innerText = currentUser.name;
+            document.getElementById('userRoleBadge').innerText = currentUser.role === 'admin' ? 'Administrator' : 'Anggota MGMP';
+            document.getElementById('userAvatar').innerText = (currentUser.name || '?').charAt(0);
+        }
+
+        function applyAuthState() {
+            const loggedIn = !!currentUser;
+            const isAdmin = loggedIn && currentUser.role === 'admin';
+            const show = (id, on) => document.getElementById(id)?.classList.toggle('hidden', !on);
+
+            const pb = document.getElementById('profileBlock');
+            pb.classList.toggle('hidden', !loggedIn);
+            pb.classList.toggle('flex', loggedIn);
+            show('btnLogin', !loggedIn);
+            show('btnBannerLogin', !loggedIn);
+            show('btnMyPassword', loggedIn && USE_FIREBASE);
+            document.querySelectorAll('.lock-icon').forEach(i => i.style.display = loggedIn ? 'none' : '');
+
+            updateHeaderUser();
+
+            ['btnAdminUploadBanner', 'btnAdminUploadHasil', 'btnAdminUploadDok', 'btnAdminUploadPresensi',
+             'btnAdminAddAnggota', 'nav-userManagement', 'mobile-nav-userManagement', 'thAksiPresensi']
+                .forEach(id => show(id, isAdmin));
+
+            renderHasilKerja();
+            renderDokumentasi();
+            renderDaftarHadir();
+            renderAnggota();
+            renderUserManagement();
+        }
+
+        function initApp() {
+            applyAuthState();
+            switchTab('dashboard');
+        }
+
+        function switchTab(tabName) {
+            if (PROTECTED_TABS.includes(tabName) && !currentUser) {
+                openLogin(`Masuk terlebih dahulu untuk membuka ${TAB_LABELS[tabName]}. Fitur ini khusus anggota MGMP.`, tabName);
+                return;
+            }
+            if (tabName === 'userManagement' && !(currentUser && currentUser.role === 'admin')) return;
+            document.querySelectorAll('.mobile-nav-btn').forEach(b => {
+                b.classList.add('border-b-2');
+                const on = b.id === `mobile-nav-${tabName}`;
+                b.classList.toggle('border-gold-500', on);
+                b.classList.toggle('border-transparent', !on);
+                b.classList.toggle('text-brand-700', on);
+                b.classList.toggle('font-bold', on);
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(!btn.id.includes('userManagement')) {
+                    btn.classList.remove('bg-brand-500', 'text-white', 'shadow-sm');
+                    btn.classList.add('text-slate-600', 'dark:text-slate-400');
+                }
+            });
+
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabName}`);
+            if (activeNav && !tabName.includes('userManagement')) {
+                activeNav.classList.add('bg-brand-500', 'text-white', 'shadow-sm');
+            }
+        }
+
+        // ==================== RENDER & EDIT HASIL KERJA ====================
+        function renderHasilKerja() {
+            const grid = document.getElementById('hasilKerjaGrid');
+            grid.innerHTML = '';
+            const filtered = hasilKerjaData.filter(item => activeCategoryFilter === 'semua' || item.category === activeCategoryFilter);
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "glass-card rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between";
+                
+                let adminActionHtml = '';
+                if (currentUser && currentUser.role === 'admin') {
+                    adminActionHtml = `
+                        <div class="flex space-x-1">
+                            <button onclick="openUploadModal('edit', '${esc(item.id)}')" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded text-[10px]" title="Edit Modul"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteModul('${esc(item.id)}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded text-[10px]" title="Hapus Modul"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-brand-100 text-brand-700 dark:bg-brand-900/60 dark:text-brand-300">${esc(item.category)}</span>
+                            <span class="text-[10px] text-slate-400 font-medium">${esc(item.classLevel)}</span>
+                        </div>
+                        <h4 class="font-bold text-slate-900 dark:text-white text-xs sm:text-sm leading-snug">${esc(item.title)}</h4>
+                        <div class="text-[11px] text-slate-500 dark:text-slate-400 space-y-1">
+                            <p><i class="fa-regular fa-user mr-1.5"></i> ${esc(item.author)} (${esc(item.school)})</p>
+                        </div>
+                    </div>
+                    <div class="pt-4 mt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-[10px] text-slate-400">${esc(item.date)}</span>
+                        <div class="flex items-center space-x-2">
+                            ${adminActionHtml}
+                            <a href="${safeUrl(item.driveLink)}" target="_blank" class="px-3 py-1.5 bg-brand-500 hover:bg-brand-600 text-white font-medium rounded-lg text-[11px] flex items-center space-x-1 shadow-sm transition">
+                                <i class="fa-brands fa-google-drive"></i><span>Buka File</span>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            document.getElementById('statModulCount').innerText = currentUser ? hasilKerjaData.length : '–';
+        }
+
+        function setCategoryFilter(cat) {
+            activeCategoryFilter = cat;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.className = "filter-btn px-3 py-1.5 rounded-lg bg-brand-500 text-white font-medium shrink-0 shadow-sm";
+                } else {
+                    btn.className = "filter-btn px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium shrink-0";
+                }
+            });
+            renderHasilKerja();
+        }
+
+        function filterHasilKerja() {
+            const query = document.getElementById('searchHasilKerja').value.toLowerCase();
+            const cards = document.getElementById('hasilKerjaGrid').children;
+            Array.from(cards).forEach(card => {
+                card.style.display = card.innerText.toLowerCase().includes(query) ? 'flex' : 'none';
+            });
+        }
+
+        function openUploadModal(mode, id = null) {
+            document.getElementById('uploadModal').classList.remove('hidden');
+            if (mode === 'add') {
+                document.getElementById('uploadModalTitle').innerText = "Unggah Dokumen / Modul Ajar";
+                document.getElementById('modulIdEdit').value = '';
+                document.getElementById('modalTitle').value = '';
+                document.getElementById('modalAuthor').value = '';
+                document.getElementById('modalDriveLink').value = '';
+                document.getElementById('modalCategory').value = 'Pengolahan';
+                document.getElementById('modalClass').value = 'Kelas 10';
+            } else {
+                document.getElementById('uploadModalTitle').innerText = "Edit Dokumen / Modul Ajar";
+                const item = hasilKerjaData.find(d => sameId(d.id, id));
+                if (item) {
+                    document.getElementById('modulIdEdit').value = item.id;
+                    document.getElementById('modalTitle').value = item.title;
+                    document.getElementById('modalCategory').value = item.category;
+                    document.getElementById('modalClass').value = item.classLevel;
+                    document.getElementById('modalAuthor').value = item.author;
+                    document.getElementById('modalDriveLink').value = item.driveLink;
+                }
+            }
+        }
+
+        function closeUploadModal() { document.getElementById('uploadModal').classList.add('hidden'); }
+        
+        async function handleUploadSubmit() {
+            if (saving) return;
+            const idEdit = document.getElementById('modulIdEdit').value;
+            const title = document.getElementById('modalTitle').value.trim();
+            const category = document.getElementById('modalCategory').value;
+            const classLevel = document.getElementById('modalClass').value;
+            const author = document.getElementById('modalAuthor').value.trim();
+            const driveLink = document.getElementById('modalDriveLink').value.trim();
+
+            if (!title || !author || !driveLink) {
+                alert("Harap isi semua kolom form!");
+                return;
+            }
+
+            const existing = idEdit ? hasilKerjaData.find(d => sameId(d.id, idEdit)) : null;
+            const item = existing
+                ? { ...existing, title, category, classLevel, author, driveLink }
+                : { id: newId(), title, category, classLevel, author, school: "SMAN Kab. Sambas", date: todayId(), createdAt: Date.now(), driveLink };
+
+            saving = true;
+            try { if (await saveItem('modul', item)) closeUploadModal(); } finally { saving = false; }
+        }
+
+        async function deleteModul(id) {
+            if (confirm("Yakin ingin menghapus modul ini?")) await removeItem('modul', id);
+        }
+
+        // ==================== RENDER & EDIT DOKUMENTASI ====================
+        function renderDokumentasi() {
+            const grid = document.getElementById('dokumentasiGrid');
+            grid.innerHTML = '';
+            dokumentasiData.forEach(item => {
+                let adminActionHtml = '';
+                if (currentUser && currentUser.role === 'admin') {
+                    adminActionHtml = `
+                        <div class="mt-2 flex justify-end space-x-1 pt-2 border-t border-slate-100 dark:border-slate-800">
+                            <button onclick="openDokumentasiModal('edit', '${esc(item.id)}')" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded text-[10px]" title="Edit Foto"><i class="fa-solid fa-pen"></i> Edit</button>
+                            <button onclick="deleteDokumentasi('${esc(item.id)}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded text-[10px]" title="Hapus Foto"><i class="fa-solid fa-trash"></i> Hapus</button>
+                        </div>
+                    `;
+                }
+
+                grid.innerHTML += `
+                    <div class="group rounded-2xl overflow-hidden glass-card border border-slate-200 dark:border-slate-800 shadow-sm p-3 space-y-2">
+                        <div class="h-40 overflow-hidden bg-slate-100 rounded-xl"><img src="${safeUrl(item.img)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"></div>
+                        <div>
+                            <h4 class="font-semibold text-xs text-slate-900 dark:text-white">${esc(item.title)}</h4>
+                            <p class="text-[10px] text-slate-400 mt-1"><i class="fa-regular fa-calendar mr-1"></i>${esc(item.date)}</p>
+                        </div>
+                        ${adminActionHtml}
+                    </div>
+                `;
+            });
+            document.getElementById('statDokCount').innerText = dokumentasiData.length;
+        }
+
+        function openDokumentasiModal(mode, id = null) {
+            document.getElementById('dokumentasiModal').classList.remove('hidden');
+            if (mode === 'add') {
+                document.getElementById('dokModalTitle').innerText = "Tambah Dokumentasi Kegiatan";
+                document.getElementById('dokIdEdit').value = '';
+                document.getElementById('dokTitle').value = '';
+                document.getElementById('dokDate').value = '';
+                document.getElementById('dokImg').value = '';
+            } else {
+                document.getElementById('dokModalTitle').innerText = "Edit Dokumentasi Kegiatan";
+                const item = dokumentasiData.find(d => sameId(d.id, id));
+                if (item) {
+                    document.getElementById('dokIdEdit').value = item.id;
+                    document.getElementById('dokTitle').value = item.title;
+                    document.getElementById('dokDate').value = item.date;
+                    document.getElementById('dokImg').value = item.img;
+                }
+            }
+        }
+
+        function closeDokumentasiModal() { document.getElementById('dokumentasiModal').classList.add('hidden'); }
+
+        async function handleDokumentasiSubmit() {
+            if (saving) return;
+            const idEdit = document.getElementById('dokIdEdit').value;
+            const title = document.getElementById('dokTitle').value.trim();
+            const date = document.getElementById('dokDate').value.trim();
+            const img = document.getElementById('dokImg').value.trim();
+
+            if (!title || !date || !img) {
+                alert("Harap isi semua kolom form!");
+                return;
+            }
+
+            const existing = idEdit ? dokumentasiData.find(d => sameId(d.id, idEdit)) : null;
+            const item = existing
+                ? { ...existing, title, date, img }
+                : { id: newId(), title, date, img, createdAt: Date.now() };
+
+            saving = true;
+            try { if (await saveItem('dokumentasi', item)) closeDokumentasiModal(); } finally { saving = false; }
+        }
+
+        async function deleteDokumentasi(id) {
+            if (confirm("Yakin ingin menghapus dokumentasi ini?")) await removeItem('dokumentasi', id);
+        }
+
+        // ==================== RENDER & EDIT PRESENSI ====================
+        function renderDaftarHadir() {
+            const tbody = document.getElementById('daftarHadirTableBody');
+            tbody.innerHTML = '';
+            presensiData.forEach((item, index) => {
+                let adminCol = '';
+                if (currentUser && currentUser.role === 'admin') {
+                    adminCol = `
+                        <td class="p-3 text-center space-x-1">
+                            <button onclick="openPresensiModal('edit', '${esc(item.id)}')" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded text-[10px]"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deletePresensi('${esc(item.id)}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    `;
+                }
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                        <td class="p-3">${index + 1}</td>
+                        <td class="p-3 font-semibold text-slate-900 dark:text-white">${esc(item.date)}</td>
+                        <td class="p-3">${esc(item.title)}</td>
+                        <td class="p-3">${esc(item.location)}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-semibold">${esc(item.attendance)}</span></td>
+                        <td class="p-3 text-center"><a href="${safeUrl(item.pdfLink)}" target="_blank" class="px-2.5 py-1 bg-red-50 text-red-600 rounded-lg text-[11px] font-medium"><i class="fa-solid fa-file-pdf mr-1"></i> PDF</a></td>
+                        ${adminCol}
+                    </tr>
+                `;
+            });
+            document.getElementById('statPresensiCount').innerText = currentUser ? presensiData.length : '–';
+        }
+
+        function openPresensiModal(mode, id = null) {
+            document.getElementById('presensiModal').classList.remove('hidden');
+            if (mode === 'add') {
+                document.getElementById('presModalTitle').innerText = "Tambah Arsip Scan Presensi PDF";
+                document.getElementById('presIdEdit').value = '';
+                document.getElementById('presDate').value = '';
+                document.getElementById('presTitle').value = '';
+                document.getElementById('presLocation').value = '';
+                document.getElementById('presAttendance').value = '';
+                document.getElementById('presPdfLink').value = '';
+            } else {
+                document.getElementById('presModalTitle').innerText = "Edit Arsip Presensi PDF";
+                const item = presensiData.find(d => sameId(d.id, id));
+                if (item) {
+                    document.getElementById('presIdEdit').value = item.id;
+                    document.getElementById('presDate').value = item.date;
+                    document.getElementById('presTitle').value = item.title;
+                    document.getElementById('presLocation').value = item.location;
+                    document.getElementById('presAttendance').value = item.attendance;
+                    document.getElementById('presPdfLink').value = item.pdfLink;
+                }
+            }
+        }
+
+        function closePresensiModal() { document.getElementById('presensiModal').classList.add('hidden'); }
+
+        async function handlePresensiSubmit() {
+            if (saving) return;
+            const idEdit = document.getElementById('presIdEdit').value;
+            const date = document.getElementById('presDate').value.trim();
+            const title = document.getElementById('presTitle').value.trim();
+            const location = document.getElementById('presLocation').value.trim();
+            const attendance = document.getElementById('presAttendance').value.trim();
+            const pdfLink = document.getElementById('presPdfLink').value.trim();
+
+            if (!date || !title || !pdfLink) {
+                alert("Harap isi data dengan lengkap!");
+                return;
+            }
+
+            const existing = idEdit ? presensiData.find(d => sameId(d.id, idEdit)) : null;
+            const item = existing
+                ? { ...existing, date, title, location, attendance, pdfLink }
+                : { id: newId(), date, title, location, attendance, pdfLink, createdAt: Date.now() };
+
+            saving = true;
+            try { if (await saveItem('presensi', item)) closePresensiModal(); } finally { saving = false; }
+        }
+
+        async function deletePresensi(id) {
+            if (confirm("Yakin ingin menghapus arsip presensi ini?")) await removeItem('presensi', id);
+        }
+
+        // ==================== RENDER ANGGOTA & DIREKTORI ====================
+        function renderAnggota() {
+            const grid = document.getElementById('anggotaGrid');
+            grid.innerHTML = '';
+            const isAdmin = currentUser && currentUser.role === 'admin';
+            usersData.forEach(item => {
+                const editBtn = isAdmin ? `
+                        <button onclick="openUserModal('edit', '${esc(item.id)}')" class="absolute top-2 right-2 w-7 h-7 flex items-center justify-center bg-white dark:bg-slate-700 hover:bg-brand-500 hover:text-white text-slate-500 dark:text-slate-300 rounded-lg shadow-sm border border-slate-200 dark:border-slate-600 transition" title="Edit Anggota">
+                            <i class="fa-solid fa-pen text-[10px]"></i>
+                        </button>` : '';
+                grid.innerHTML += `
+                    <div class="relative p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex items-start space-x-3">
+                        ${editBtn}
+                        <div class="w-9 h-9 rounded-full bg-brand-500 text-white font-bold flex items-center justify-center text-xs shrink-0">${esc((item.name || '?').charAt(0))}</div>
+                        <div class="text-xs space-y-0.5 overflow-hidden ${isAdmin ? 'pr-7' : ''}">
+                            <h4 class="font-bold text-slate-900 dark:text-white truncate">${esc(item.name)}</h4>
+                            <p class="text-[10px] text-brand-600 dark:text-brand-400 font-semibold">${esc(item.position)}</p>
+                            <p class="text-[11px] text-slate-600 dark:text-slate-400 truncate">${esc(item.school)}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('statUserCount').innerText = usersData.length;
+        }
+
+        function filterAnggota() {
+            const query = document.getElementById('searchAnggota').value.toLowerCase();
+            Array.from(document.getElementById('anggotaGrid').children).forEach(card => {
+                card.style.display = card.innerText.toLowerCase().includes(query) ? 'flex' : 'none';
+            });
+        }
+
+        // ==================== MANAJEMEN USER (ADMIN) ====================
+        function renderUserManagement() {
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = '';
+            const myId = currentUser ? String(currentUser.id) : '';
+            usersData.forEach(u => {
+                const roleLabel = u.role ? u.role.toUpperCase() : 'TANPA LOGIN';
+                const roleCls = u.role === 'admin' ? 'bg-amber-100 text-amber-700' : (u.role ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500');
+                const loginCell = USE_FIREBASE
+                    ? (u.uid ? '<span class="text-emerald-600 font-semibold">Aktif</span>' : '<span class="text-slate-400">Direktori saja</span>')
+                    : esc(u.username);
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                        <td class="p-3"><div class="font-semibold text-slate-900 dark:text-white">${esc(u.name)}</div><div class="text-[10px] text-slate-400">${esc(u.email || '')}</div></td>
+                        <td class="p-3">${esc(u.school)}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-brand-100 text-brand-700 dark:bg-brand-900/60 dark:text-brand-300">${esc(u.position)}</span></td>
+                        <td class="p-3 font-mono text-[11px]">${loginCell}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${roleCls}">${roleLabel}</span></td>
+                        <td class="p-3 text-center space-x-2">
+                            <button onclick="openUserModal('edit', '${esc(u.id)}')" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded text-[10px]" title="Edit User"><i class="fa-solid fa-pen"></i></button>
+                            ${String(u.id) !== myId ? `<button onclick="deleteUser('${esc(u.id)}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded text-[10px]" title="Hapus User"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function openUserModal(mode, id = null) {
+            document.getElementById('userModal').classList.remove('hidden');
+            const emailEl = document.getElementById('userEmailInput');
+            const pwRow = document.getElementById('userPasswordRow');
+            const hint = document.getElementById('userModalHint');
+            emailEl.disabled = false;
+            pwRow.classList.remove('hidden');
+            hint.classList.add('hidden');
+
+            if (mode === 'add') {
+                document.getElementById('userModalTitle').innerText = "Tambah Anggota Baru";
+                document.getElementById('userIdEdit').value = '';
+                document.getElementById('userNameInput').value = '';
+                emailEl.value = '';
+                document.getElementById('userSchoolInput').value = '';
+                document.getElementById('userPositionInput').value = 'Anggota Guru';
+                document.getElementById('userUsernameInput').value = '';
+                document.getElementById('userPasswordInput').value = '';
+                document.getElementById('userRoleInput').value = 'anggota';
+                if (USE_FIREBASE) {
+                    hint.innerText = 'Isi Email dan Kata Sandi Awal untuk membuat akun login. Kosongkan keduanya jika hanya ingin mendaftarkan nama di Direktori Anggota (tanpa akun).';
+                    hint.classList.remove('hidden');
+                }
+            } else {
+                document.getElementById('userModalTitle').innerText = "Edit Data Anggota";
+                const u = usersData.find(item => sameId(item.id, id));
+                if (u) {
+                    document.getElementById('userIdEdit').value = u.id;
+                    document.getElementById('userNameInput').value = u.name || '';
+                    emailEl.value = u.email || '';
+                    document.getElementById('userSchoolInput').value = u.school || '';
+                    document.getElementById('userPositionInput').value = u.position || 'Anggota Guru';
+                    document.getElementById('userUsernameInput').value = u.username || '';
+                    document.getElementById('userPasswordInput').value = USE_FIREBASE ? '' : (u.password || '');
+                    document.getElementById('userRoleInput').value = u.role || 'anggota';
+                    if (USE_FIREBASE) {
+                        if (u.uid) {
+                            emailEl.disabled = true;
+                            pwRow.classList.add('hidden');
+                            hint.innerText = 'Email adalah identitas login dan tidak dapat diubah. Kata sandi diganti oleh anggota sendiri lewat "Lupa kata sandi?" di halaman login.';
+                        } else {
+                            hint.innerText = 'Anggota ini belum punya akun login. Isi Email dan Kata Sandi Awal untuk membuatkan akun.';
+                        }
+                        hint.classList.remove('hidden');
+                    }
+                }
+            }
+        }
+
+        function closeUserModal() { document.getElementById('userModal').classList.add('hidden'); }
+
+        async function handleUserSubmit() {
+            if (saving) return;
+            const idEdit = document.getElementById('userIdEdit').value;
+            const name = document.getElementById('userNameInput').value.trim();
+            const school = document.getElementById('userSchoolInput').value.trim();
+            const position = document.getElementById('userPositionInput').value;
+            const username = document.getElementById('userUsernameInput').value.trim();
+            const password = document.getElementById('userPasswordInput').value.trim();
+            const role = document.getElementById('userRoleInput').value;
+            const emailInput = document.getElementById('userEmailInput').value.trim().toLowerCase();
+
+            if (!name) { alert("Nama lengkap wajib diisi!"); return; }
+
+            if (USE_FIREBASE) {
+                saving = true;
+                try { await submitUserFirebase({ idEdit, name, school, position, role, email: emailInput, password }); }
+                finally { saving = false; }
+                return;
+            }
+
+            if (!username || !password) {
+                alert("Harap isi data dengan lengkap!");
+                return;
+            }
+            if (usersData.some(u => u.username === username && !sameId(u.id, idEdit))) {
+                alert("Username sudah dipakai, silakan pilih yang lain!");
+                return;
+            }
+
+            if (idEdit) {
+                const idx = usersData.findIndex(u => sameId(u.id, idEdit));
+                if (idx !== -1) {
+                    usersData[idx] = { ...usersData[idx], name, school, position, username, password, role, email: emailInput || usersData[idx].email };
+                    if (currentUser && sameId(currentUser.id, idEdit)) {
+                        currentUser = usersData[idx];
+                        updateHeaderUser();
+                    }
+                }
+            } else {
+                usersData.push({
+                    id: Date.now(),
+                    name, school, position, username, password, role,
+                    email: emailInput || `${username}@guru.sma.id`
+                });
+            }
+
+            renderUserManagement();
+            renderAnggota();
+            closeUserModal();
+        }
+
+        async function submitUserFirebase({ idEdit, name, school, position, role, email, password }) {
+            const existing = idEdit ? usersData.find(u => sameId(u.id, idEdit)) : null;
+            // akun yang sudah ada: email terkunci, tidak ada pembuatan akun baru
+            const wantsAccount = !(existing && existing.uid) && !!(email || password);
+            if (wantsAccount && (!email || !password)) { alert("Untuk membuat akun login, Email dan Kata Sandi Awal harus diisi keduanya."); return; }
+            if (wantsAccount && password.length < 6) { alert("Kata sandi minimal 6 karakter."); return; }
+            if (!FB) { toast('Belum terhubung ke server. Coba lagi sebentar.', 'err'); return; }
+
+            try {
+                const profile = { name, school, position };
+
+                if (existing) {
+                    if (existing.uid && currentUser && existing.uid === currentUser.uid && role !== 'admin') {
+                        alert("Anda tidak dapat menurunkan peran akun Anda sendiri.");
+                        return;
+                    }
+                    const ops = [{ type: 'set', col: 'profiles', id: existing.id, data: profile, merge: true }];
+                    if (existing.uid) {
+                        ops.push({ type: 'set', col: 'users', id: existing.uid, data: { role }, merge: true });
+                    } else if (wantsAccount) {
+                        const uid = await FB.createAuthUser(email, password);
+                        ops.push({ type: 'set', col: 'users', id: uid, data: { email, role, profileId: existing.id } });
+                    }
+                    await FB.batch(ops);
+                } else if (wantsAccount) {
+                    const uid = await FB.createAuthUser(email, password);
+                    await FB.batch([
+                        { type: 'set', col: 'users', id: uid, data: { email, role, profileId: uid } },
+                        { type: 'set', col: 'profiles', id: uid, data: { ...profile, createdAt: Date.now() } }
+                    ]);
+                } else {
+                    await FB.setDoc('profiles', FB.newId(), { ...profile, createdAt: Date.now() });
+                }
+                toast('Data anggota tersimpan');
+                closeUserModal();
+            } catch (e) {
+                console.error(e);
+                toast(errMsg(e), 'err');
+            }
+        }
+
+        async function deleteUser(id) {
+            const u = usersData.find(x => sameId(x.id, id));
+            if (!u) return;
+            if (currentUser && sameId(currentUser.id, id)) { alert("Anda tidak dapat menghapus akun Anda sendiri."); return; }
+            const note = USE_FIREBASE && u.uid ? "\n\nAkun ini tidak akan bisa mengakses apa pun lagi." : "";
+            if (!confirm("Hapus " + u.name + " dari daftar anggota?" + note)) return;
+
+            if (USE_FIREBASE) {
+                if (!FB) { toast('Belum terhubung ke server. Coba lagi sebentar.', 'err'); return; }
+                try {
+                    const ops = [{ type: 'del', col: 'profiles', id: u.id }];
+                    if (u.uid) ops.push({ type: 'del', col: 'users', id: u.uid });
+                    await FB.batch(ops);
+                    toast('Anggota dihapus');
+                } catch (e) { console.error(e); toast(errMsg(e), 'err'); }
+                return;
+            }
+            const i = usersData.findIndex(x => sameId(x.id, id));
+            if (i > -1) usersData.splice(i, 1);
+            renderUserManagement();
+            renderAnggota();
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = 'fa-regular fa-moon text-lg';
+            } else {
+                html.classList.add('dark');
+                icon.className = 'fa-regular fa-sun text-lg';
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            const loginOpen = !document.getElementById('loginView').classList.contains('hidden');
+            if (!loginOpen) return;
+            if (e.key === 'Escape') closeLogin();
+            if (e.key === 'Enter') handleLogin();
+        });
+
+        configureForMode();
+        initApp();
+    </script>
+
+    <script type="module">
+        const cfg = window.FIREBASE_CONFIG || {};
+        if (cfg.apiKey && !String(cfg.apiKey).startsWith('ISI_')) {
+            try {
+                const B = 'https://www.gstatic.com/firebasejs/10.12.2/';
+                const [A, Au, F] = await Promise.all([
+                    import(B + 'firebase-app.js'),
+                    import(B + 'firebase-auth.js'),
+                    import(B + 'firebase-firestore.js')
+                ]);
+                const app = A.initializeApp(cfg);
+                const auth = Au.getAuth(app);
+                let db;
+                try {   // cache lokal: buka ulang lebih cepat & tetap bisa dibaca saat sinyal lemah
+                    db = F.initializeFirestore(app, { localCache: F.persistentLocalCache({ tabManager: F.persistentMultipleTabManager() }) });
+                } catch (e) { db = F.getFirestore(app); }
+
+                const api = {
+                    onAuth: (cb) => Au.onAuthStateChanged(auth, cb),
+                    login: (email, pw) => Au.signInWithEmailAndPassword(auth, email, pw),
+                    logout: () => Au.signOut(auth),
+                    resetPassword: (email) => Au.sendPasswordResetEmail(auth, email),
+                    newId: () => F.doc(F.collection(db, 'ids')).id,
+                    getDoc: async (c, id) => { const s = await F.getDoc(F.doc(db, c, id)); return s.exists() ? { id: s.id, ...s.data() } : null; },
+                    setDoc: (c, id, data, merge = false) => F.setDoc(F.doc(db, c, id), data, { merge }),
+                    delDoc: (c, id) => F.deleteDoc(F.doc(db, c, id)),
+                    batch: (ops) => {
+                        const b = F.writeBatch(db);
+                        ops.forEach(o => {
+                            const ref = F.doc(db, o.col, o.id);
+                            if (o.type === 'del') b.delete(ref); else b.set(ref, o.data, { merge: !!o.merge });
+                        });
+                        return b.commit();
+                    },
+                    listen: (c, cb, err) => F.onSnapshot(F.collection(db, c),
+                        (snap) => cb(snap.docs.map(d => ({ id: d.id, ...d.data() }))), err),
+                    // Membuat akun baru TANPA mengeluarkan admin: pakai instance aplikasi kedua
+                    createAuthUser: async (email, password) => {
+                        const sec = A.getApps().find(a => a.name === 'secondary') || A.initializeApp(cfg, 'secondary');
+                        const sAuth = Au.getAuth(sec);
+                        try {
+                            const cred = await Au.createUserWithEmailAndPassword(sAuth, email, password);
+                            return cred.user.uid;
+                        } finally {
+                            await Au.signOut(sAuth).catch(() => { });
+                        }
+                    }
+                };
+                window.onFirebaseReady && window.onFirebaseReady(api);
+            } catch (e) {
+                console.error('Firebase gagal dimuat', e);
+                window.onFirebaseFailed && window.onFirebaseFailed(e);
+            }
+        }
+    </script>
+</body>
+</html>
