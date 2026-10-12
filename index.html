@@ -877,7 +877,7 @@
                     <input type="text" id="dokDate" placeholder="Contoh: 10 November 2026" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">URL Foto (Link Gambar Online / Unsplash)</label>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">URL Foto (link gambar, atau link berbagi Google Drive)</label>
                     <input type="url" id="dokImg" placeholder="https://images.unsplash.com/..." class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
                 </div>
                 <div class="pt-3 flex justify-end space-x-2">
@@ -983,6 +983,21 @@
                 const x = new URL(String(u || '').trim());
                 return (x.protocol === 'https:' || x.protocol === 'http:') ? esc(x.href) : '#';
             } catch (e) { return '#'; }
+        }
+        // Ubah tautan berbagi Google Drive menjadi alamat gambar yang bisa ditampilkan; tambah https:// bila belum ada
+        function imgSrc(u) {
+            let v = String(u || '').trim();
+            if (!v) return '';
+            if (!/^https?:\/\//i.test(v)) v = 'https://' + v;
+            const m = v.match(/drive\.google\.com\/file\/d\/([\w-]+)/) ||
+                      v.match(/drive\.google\.com\/(?:open|uc|thumbnail)\?(?:[^#]*&)?id=([\w-]+)/) ||
+                      v.match(/docs\.google\.com\/uc\?(?:[^#]*&)?id=([\w-]+)/);
+            if (m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w1000';
+            return v;
+        }
+        function imgFail(el) {
+            el.onerror = null;
+            el.parentElement.innerHTML = '<div class="w-full h-full flex flex-col items-center justify-center gap-1 p-3 text-center text-[11px] text-slate-400"><i class="fa-regular fa-image text-xl"></i>Foto tidak dapat dimuat.<br>Periksa tautan gambar dan pastikan dibagikan untuk umum.</div>';
         }
         function todayId() {
             return new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -1096,7 +1111,7 @@
             usersData.push(...list);
             if (currentUser) {
                 const me = list.find(p => sameId(p.id, currentUser.id));
-                if (me) { currentUser.name = me.name; currentUser.school = me.school; currentUser.position = me.position; }
+                if (me) { currentUser.name = me.name || currentUser.name; currentUser.school = me.school ?? currentUser.school; currentUser.position = me.position ?? currentUser.position; }
                 updateHeaderUser();
             }
             renderAnggota();
@@ -1296,9 +1311,10 @@
 
         function updateHeaderUser() {
             if (!currentUser) return;
-            document.getElementById('userNameDisplay').innerText = currentUser.name;
+            const shownName = currentUser.name || currentUser.email || 'Pengguna';
+            document.getElementById('userNameDisplay').innerText = shownName;
             document.getElementById('userRoleBadge').innerText = currentUser.role === 'admin' ? 'Administrator' : 'Anggota MGMP';
-            document.getElementById('userAvatar').innerText = (currentUser.name || '?').charAt(0);
+            document.getElementById('userAvatar').innerText = shownName.charAt(0).toUpperCase();
         }
 
         function applyAuthState() {
@@ -1498,7 +1514,7 @@
 
                 grid.innerHTML += `
                     <div class="group rounded-2xl overflow-hidden glass-card border border-slate-200 dark:border-slate-800 shadow-sm p-3 space-y-2">
-                        <div class="h-40 overflow-hidden bg-slate-100 rounded-xl"><img src="${safeUrl(item.img)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"></div>
+                        <div class="h-40 overflow-hidden bg-slate-100 rounded-xl"><img src="${safeUrl(imgSrc(item.img))}" alt="${esc(item.title)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"></div>
                         <div>
                             <h4 class="font-semibold text-xs text-slate-900 dark:text-white">${esc(item.title)}</h4>
                             <p class="text-[10px] text-slate-400 mt-1"><i class="fa-regular fa-calendar mr-1"></i>${esc(item.date)}</p>
@@ -1655,7 +1671,7 @@
                         ${editBtn}
                         <div class="w-9 h-9 rounded-full bg-brand-500 text-white font-bold flex items-center justify-center text-xs shrink-0">${esc((item.name || '?').charAt(0))}</div>
                         <div class="text-xs space-y-0.5 overflow-hidden ${isAdmin ? 'pr-7' : ''}">
-                            <h4 class="font-bold text-slate-900 dark:text-white truncate">${esc(item.name)}</h4>
+                            <h4 class="font-bold text-slate-900 dark:text-white truncate">${esc(item.name || '(nama belum diisi)')}</h4>
                             <p class="text-[10px] text-brand-600 dark:text-brand-400 font-semibold">${esc(item.position)}</p>
                             <p class="text-[11px] text-slate-600 dark:text-slate-400 truncate">${esc(item.school)}</p>
                         </div>
