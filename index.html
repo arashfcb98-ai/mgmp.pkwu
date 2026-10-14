@@ -728,9 +728,14 @@
                             <h2 class="text-lg font-bold text-slate-900 dark:text-white"><i class="fa-solid fa-users-gear text-amber-500 mr-2"></i> Manajemen Akun Pengguna</h2>
                             <p class="text-xs text-slate-500">Fitur khusus Admin untuk menambah, mengedit, atau menghapus akun anggota MGMP.</p>
                         </div>
-                        <button onclick="openUserModal('add')" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold rounded-xl shadow transition flex items-center">
-                            <i class="fa-solid fa-user-plus mr-1.5"></i> Tambah User Baru
-                        </button>
+                        <div class="flex flex-wrap gap-2">
+                            <button id="btnImportPengurus" onclick="importPengurus()" class="hidden px-4 py-2 bg-gold-400 hover:bg-gold-500 text-brand-900 text-xs font-bold rounded-xl shadow transition items-center">
+                                <i class="fa-solid fa-file-import mr-1.5"></i> Impor Pengurus 2025/2027
+                            </button>
+                            <button onclick="openUserModal('add')" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold rounded-xl shadow transition flex items-center">
+                                <i class="fa-solid fa-user-plus mr-1.5"></i> Tambah User Baru
+                            </button>
+                        </div>
                     </div>
 
                     <div class="overflow-x-auto">
@@ -833,6 +838,15 @@
                         <option value="Bendahara">Bendahara</option>
                         <option value="Koordinator Bidang">Koordinator Bidang</option>
                         <option value="Anggota Guru" selected>Anggota Guru</option>
+                    </select>
+                </div>
+                <div id="userBidangRow">
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Bidang</label>
+                    <select id="userBidangInput" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
+                        <option value="">- (pengurus inti / tidak ada)</option>
+                        <option value="Perencanaan dan Pengembangan Profesionalisme">Perencanaan dan Pengembangan Profesionalisme</option>
+                        <option value="Inovasi dan Kewirausahaan">Inovasi dan Kewirausahaan</option>
+                        <option value="Humas dan Publikasi">Humas dan Publikasi</option>
                     </select>
                 </div>
                 <div id="userUsernameRow">
@@ -1116,6 +1130,7 @@
             }
             renderAnggota();
             renderUserManagement();
+            updateImportButton();
         }
 
         function attachPublic() {
@@ -1213,6 +1228,75 @@
             document.getElementById('userUsernameRow').classList.add('hidden');
             document.getElementById('thUsername').innerText = 'Akun Login';
             document.getElementById('userPasswordLabel').innerText = 'Kata Sandi Awal (min. 6 karakter)';
+        }
+
+
+        // ==================== IMPOR PENGURUS 2025/2027 ====================
+        const PENGURUS_2025 = [
+            ["Aras Hidayat, S.Pd", "Ketua", ""],
+            ["Nur Azlin, S.Pd", "Sekretaris", ""],
+            ["Elsi, S.Pd", "Bendahara", ""],
+            ["Agus Setiadi, S.Pd", "Koordinator Bidang", "Perencanaan dan Pengembangan Profesionalisme"],
+            ["Sasmita Dewi, S.Pd", "Koordinator Bidang", "Inovasi dan Kewirausahaan"],
+            ["Ramadhan, S.Pd", "Koordinator Bidang", "Humas dan Publikasi"],
+            ["Amrina Rosyada, S.Pd", "Anggota Guru", "Perencanaan dan Pengembangan Profesionalisme"],
+            ["Rizki Dwisuda, S.Pd", "Anggota Guru", "Perencanaan dan Pengembangan Profesionalisme"],
+            ["Wiwik Prastiyowati, S.E", "Anggota Guru", "Perencanaan dan Pengembangan Profesionalisme"],
+            ["Nuraini, S.Pd", "Anggota Guru", "Perencanaan dan Pengembangan Profesionalisme"],
+            ["Sulastri, S.Pd", "Anggota Guru", "Perencanaan dan Pengembangan Profesionalisme"],
+            ["Nety Indrawati, S.P", "Anggota Guru", "Perencanaan dan Pengembangan Profesionalisme"],
+            ["Marini, S.E", "Anggota Guru", "Perencanaan dan Pengembangan Profesionalisme"],
+            ["Iis Sugiarti", "Anggota Guru", "Perencanaan dan Pengembangan Profesionalisme"],
+            ["Mariati, S.P", "Anggota Guru", "Perencanaan dan Pengembangan Profesionalisme"],
+            ["Abu Hanifah, S.H", "Anggota Guru", "Inovasi dan Kewirausahaan"],
+            ["Rusdah, S.Pd", "Anggota Guru", "Inovasi dan Kewirausahaan"],
+            ["Ediawati", "Anggota Guru", "Inovasi dan Kewirausahaan"],
+            ["Malasari, S.Pd", "Anggota Guru", "Inovasi dan Kewirausahaan"],
+            ["Superdaus, S.S.T. Ars", "Anggota Guru", "Inovasi dan Kewirausahaan"],
+            ["Riki, S.Hut", "Anggota Guru", "Inovasi dan Kewirausahaan"],
+            ["Nur Fattin, S. T. P", "Anggota Guru", "Inovasi dan Kewirausahaan"],
+            ["Apria Maulina, S.Pd., M.Pd", "Anggota Guru", "Humas dan Publikasi"],
+            ["Ayu Andriani, S.Pd", "Anggota Guru", "Humas dan Publikasi"],
+            ["Muhammad Reza, S.Pd", "Anggota Guru", "Humas dan Publikasi"],
+            ["Nani Irmayani, S.Pd", "Anggota Guru", "Humas dan Publikasi"],
+            ["Nabu. S, Hut", "Anggota Guru", "Humas dan Publikasi"],
+            ["Harmita Aprilanti, S.Pd", "Anggota Guru", "Humas dan Publikasi"]
+        ];
+        const normName = (n) => String(n || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+        function missingPengurus() {
+            const have = new Set(usersData.map(u => normName(u.name)));
+            return PENGURUS_2025.filter(r => !have.has(normName(r[0])));
+        }
+
+        function updateImportButton() {
+            const btn = document.getElementById('btnImportPengurus');
+            if (!btn) return;
+            const on = USE_FIREBASE && !!FB && !!currentUser && currentUser.role === 'admin' && missingPengurus().length > 0;
+            btn.classList.toggle('hidden', !on);
+            btn.classList.toggle('flex', on);
+        }
+
+        async function importPengurus() {
+            if (!USE_FIREBASE || !FB || !currentUser || currentUser.role !== 'admin' || saving) return;
+            const todo = missingPengurus();
+            if (!todo.length) { toast('Semua nama sudah ada di direktori.'); updateImportButton(); return; }
+            const skipped = PENGURUS_2025.length - todo.length;
+            if (!confirm("Tambahkan " + todo.length + " nama pengurus dan anggota bidang ke Direktori Anggota?\n\n" +
+                (skipped ? skipped + " nama yang sudah ada dilewati (data lama dipertahankan).\n" : "") +
+                "Mereka belum punya akun login. Akun bisa dibuat nanti lewat tombol edit.")) return;
+            saving = true;
+            try {
+                const now = Date.now();
+                await FB.batch(todo.map((r, i) => ({
+                    type: 'set', col: 'profiles', id: FB.newId(),
+                    data: { name: r[0], school: '', position: r[1], bidang: r[2], createdAt: now + i }
+                })));
+                toast(todo.length + " anggota ditambahkan");
+            } catch (e) {
+                console.error(e);
+                toast(errMsg(e), 'err');
+            } finally { saving = false; }
         }
 
         const PROTECTED_TABS = ['hasilKerja', 'daftarHadir'];
@@ -1341,6 +1425,7 @@
             renderDaftarHadir();
             renderAnggota();
             renderUserManagement();
+            updateImportButton();
         }
 
         function initApp() {
@@ -1672,7 +1757,7 @@
                         <div class="w-9 h-9 rounded-full bg-brand-500 text-white font-bold flex items-center justify-center text-xs shrink-0">${esc((item.name || '?').charAt(0))}</div>
                         <div class="text-xs space-y-0.5 overflow-hidden ${isAdmin ? 'pr-7' : ''}">
                             <h4 class="font-bold text-slate-900 dark:text-white truncate">${esc(item.name || '(nama belum diisi)')}</h4>
-                            <p class="text-[10px] text-brand-600 dark:text-brand-400 font-semibold">${esc(item.position)}</p>
+                            <p class="text-[10px] text-brand-600 dark:text-brand-400 font-semibold">${esc(item.position)}${item.bidang ? ' · ' + esc(item.bidang) : ''}</p>
                             <p class="text-[11px] text-slate-600 dark:text-slate-400 truncate">${esc(item.school)}</p>
                         </div>
                     </div>
@@ -1703,7 +1788,7 @@
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                         <td class="p-3"><div class="font-semibold text-slate-900 dark:text-white">${esc(u.name)}</div><div class="text-[10px] text-slate-400">${esc(u.email || '')}</div></td>
                         <td class="p-3">${esc(u.school)}</td>
-                        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-brand-100 text-brand-700 dark:bg-brand-900/60 dark:text-brand-300">${esc(u.position)}</span></td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-brand-100 text-brand-700 dark:bg-brand-900/60 dark:text-brand-300">${esc(u.position)}</span>${u.bidang ? `<div class="text-[10px] text-slate-400 mt-1">${esc(u.bidang)}</div>` : ''}</td>
                         <td class="p-3 font-mono text-[11px]">${loginCell}</td>
                         <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${roleCls}">${roleLabel}</span></td>
                         <td class="p-3 text-center space-x-2">
@@ -1731,6 +1816,7 @@
                 emailEl.value = '';
                 document.getElementById('userSchoolInput').value = '';
                 document.getElementById('userPositionInput').value = 'Anggota Guru';
+                document.getElementById('userBidangInput').value = '';
                 document.getElementById('userUsernameInput').value = '';
                 document.getElementById('userPasswordInput').value = '';
                 document.getElementById('userRoleInput').value = 'anggota';
@@ -1747,6 +1833,7 @@
                     emailEl.value = u.email || '';
                     document.getElementById('userSchoolInput').value = u.school || '';
                     document.getElementById('userPositionInput').value = u.position || 'Anggota Guru';
+                    document.getElementById('userBidangInput').value = u.bidang || '';
                     document.getElementById('userUsernameInput').value = u.username || '';
                     document.getElementById('userPasswordInput').value = USE_FIREBASE ? '' : (u.password || '');
                     document.getElementById('userRoleInput').value = u.role || 'anggota';
@@ -1772,6 +1859,7 @@
             const name = document.getElementById('userNameInput').value.trim();
             const school = document.getElementById('userSchoolInput').value.trim();
             const position = document.getElementById('userPositionInput').value;
+            const bidang = document.getElementById('userBidangInput').value;
             const username = document.getElementById('userUsernameInput').value.trim();
             const password = document.getElementById('userPasswordInput').value.trim();
             const role = document.getElementById('userRoleInput').value;
@@ -1781,7 +1869,7 @@
 
             if (USE_FIREBASE) {
                 saving = true;
-                try { await submitUserFirebase({ idEdit, name, school, position, role, email: emailInput, password }); }
+                try { await submitUserFirebase({ idEdit, name, school, position, bidang, role, email: emailInput, password }); }
                 finally { saving = false; }
                 return;
             }
@@ -1798,7 +1886,7 @@
             if (idEdit) {
                 const idx = usersData.findIndex(u => sameId(u.id, idEdit));
                 if (idx !== -1) {
-                    usersData[idx] = { ...usersData[idx], name, school, position, username, password, role, email: emailInput || usersData[idx].email };
+                    usersData[idx] = { ...usersData[idx], name, school, position, bidang, username, password, role, email: emailInput || usersData[idx].email };
                     if (currentUser && sameId(currentUser.id, idEdit)) {
                         currentUser = usersData[idx];
                         updateHeaderUser();
@@ -1807,7 +1895,7 @@
             } else {
                 usersData.push({
                     id: Date.now(),
-                    name, school, position, username, password, role,
+                    name, school, position, bidang, username, password, role,
                     email: emailInput || `${username}@guru.sma.id`
                 });
             }
@@ -1817,7 +1905,7 @@
             closeUserModal();
         }
 
-        async function submitUserFirebase({ idEdit, name, school, position, role, email, password }) {
+        async function submitUserFirebase({ idEdit, name, school, position, bidang, role, email, password }) {
             const existing = idEdit ? usersData.find(u => sameId(u.id, idEdit)) : null;
             // akun yang sudah ada: email terkunci, tidak ada pembuatan akun baru
             const wantsAccount = !(existing && existing.uid) && !!(email || password);
@@ -1826,7 +1914,7 @@
             if (!FB) { toast('Belum terhubung ke server. Coba lagi sebentar.', 'err'); return; }
 
             try {
-                const profile = { name, school, position };
+                const profile = { name, school, position, bidang };
 
                 if (existing) {
                     if (existing.uid && currentUser && existing.uid === currentUser.uid && role !== 'admin') {
