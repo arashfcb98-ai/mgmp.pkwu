@@ -1657,10 +1657,36 @@
 
         function initApp() {
             applyAuthState();
-            switchTab('dashboard');
+            routeFromHash(true);
         }
 
-        function switchTab(tabName) {
+        // ---- alamat per menu: contoh  situs.vercel.app/#arsip , #arsip/notulen
+        const TAB_SLUG = { dashboard: 'beranda', profil: 'visi-misi', hasilKerja: 'ruang-kolaborasi', dokumentasi: 'dokumentasi', daftarHadir: 'arsip', direktori: 'anggota', userManagement: 'manajemen-user' };
+        const SLUG_TAB = Object.fromEntries(Object.entries(TAB_SLUG).map(([k, v]) => [v, k]));
+        function hashFor(tab) {
+            let h = '#' + (TAB_SLUG[tab] || 'beranda');
+            if (tab === 'daftarHadir' && arsipJenis !== 'presensi') h += '/' + arsipJenis;
+            return h;
+        }
+        function syncHash(replace) {
+            const tab = Object.keys(TAB_SLUG).find(t => { const el = document.getElementById('tab-' + t); return el && !el.classList.contains('hidden'); });
+            if (!tab) return;
+            const h = hashFor(tab);
+            if (location.hash === h) return;
+            try { history[replace ? 'replaceState' : 'pushState'](null, '', h); } catch (e) { /* mis. dibuka dari file: abaikan */ }
+        }
+        function routeFromHash(initial) {
+            const [slug, sub] = location.hash.replace(/^#\/?/, '').toLowerCase().split('/');
+            const tab = SLUG_TAB[slug] || 'dashboard';
+            if (tab === 'daftarHadir' && ARSIP[sub]) arsipJenis = sub;
+            if (tab === 'userManagement' && !(currentUser && currentUser.role === 'admin')) { switchTab('dashboard', { replace: true }); return; }
+            switchTab(tab, { noHash: !!SLUG_TAB[slug], replace: initial });
+            if (tab === 'daftarHadir') renderDaftarHadir();
+        }
+        window.addEventListener('hashchange', () => routeFromHash(false));
+        window.addEventListener('popstate', () => routeFromHash(false));
+
+        function switchTab(tabName, opts = {}) {
             if (PROTECTED_TABS.includes(tabName) && !currentUser) {
                 openLogin(`Masuk terlebih dahulu untuk membuka ${TAB_LABELS[tabName]}. Fitur ini khusus anggota MGMP.`, tabName);
                 return;
@@ -1688,6 +1714,7 @@
             if (activeNav && !tabName.includes('userManagement')) {
                 activeNav.classList.add('bg-brand-500', 'text-white', 'shadow-sm');
             }
+            if (!opts.noHash) syncHash(!!opts.replace);
         }
 
         // ==================== RENDER & EDIT HASIL KERJA ====================
@@ -1893,7 +1920,7 @@
         };
         let arsipJenis = 'presensi';
         const jenisOf = (it) => ARSIP[it.jenis] ? it.jenis : 'presensi';   // data lama tanpa jenis = presensi
-        function setArsipJenis(j) { arsipJenis = ARSIP[j] ? j : 'presensi'; renderDaftarHadir(); }
+        function setArsipJenis(j) { arsipJenis = ARSIP[j] ? j : 'presensi'; renderDaftarHadir(); syncHash(false); }
 
         function renderDaftarHadir() {
             const tbody = document.getElementById('daftarHadirTableBody');
