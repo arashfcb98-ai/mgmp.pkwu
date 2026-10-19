@@ -181,7 +181,7 @@
                     <button onclick="switchTab('profil')" id="nav-profil" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition">Visi & Misi</button>
                     <button onclick="switchTab('hasilKerja')" id="nav-hasilKerja" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition">Ruang Kolaborasi<i class="fa-solid fa-lock lock-icon text-[9px] ml-1 opacity-60"></i></button>
                     <button onclick="switchTab('dokumentasi')" id="nav-dokumentasi" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition">Dokumentasi</button>
-                    <button onclick="switchTab('daftarHadir')" id="nav-daftarHadir" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition">Presensi<i class="fa-solid fa-lock lock-icon text-[9px] ml-1 opacity-60"></i></button>
+                    <button onclick="switchTab('daftarHadir')" id="nav-daftarHadir" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition">Arsip<i class="fa-solid fa-lock lock-icon text-[9px] ml-1 opacity-60"></i></button>
                     <button onclick="switchTab('direktori')" id="nav-direktori" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition">Anggota</button>
                     <button onclick="switchTab('userManagement')" id="nav-userManagement" class="nav-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition hidden text-amber-600 dark:text-amber-400">
                         <i class="fa-solid fa-users-gear mr-1"></i> Manajemen User
@@ -219,7 +219,7 @@
                 <button onclick="switchTab('profil')" id="mobile-nav-profil" class="mobile-nav-btn px-2 py-1 font-medium">Profil</button>
                 <button onclick="switchTab('hasilKerja')" id="mobile-nav-hasilKerja" class="mobile-nav-btn px-2 py-1 font-medium whitespace-nowrap">Kolaborasi<i class="fa-solid fa-lock lock-icon text-[9px] ml-1 opacity-60"></i></button>
                 <button onclick="switchTab('dokumentasi')" id="mobile-nav-dokumentasi" class="mobile-nav-btn px-2 py-1 font-medium">Galeri</button>
-                <button onclick="switchTab('daftarHadir')" id="mobile-nav-daftarHadir" class="mobile-nav-btn px-2 py-1 font-medium">Presensi<i class="fa-solid fa-lock lock-icon text-[9px] ml-1 opacity-60"></i></button>
+                <button onclick="switchTab('daftarHadir')" id="mobile-nav-daftarHadir" class="mobile-nav-btn px-2 py-1 font-medium">Arsip<i class="fa-solid fa-lock lock-icon text-[9px] ml-1 opacity-60"></i></button>
                 <button onclick="switchTab('direktori')" id="mobile-nav-direktori" class="mobile-nav-btn px-2 py-1 font-medium">Anggota</button>
                 <button onclick="switchTab('userManagement')" id="mobile-nav-userManagement" class="mobile-nav-btn px-2 py-1 font-medium hidden text-amber-600">User</button>
             </div>
@@ -237,7 +237,7 @@
                         <h1 class="text-2xl sm:text-3xl font-bold mt-2 font-heading">Portal Resmi MGMP PKWU SMA</h1>
                         <p class="mt-1 font-heading font-semibold italic text-gold-400">MGMP PKWU? Berkarya!!!</p>
                         <p class="mt-2 text-brand-100 text-sm leading-relaxed">
-                            Pusat kolaborasi guru Prakarya dan Kewirausahaan SMA se-Kabupaten Sambas dalam berbagi Modul Ajar, Perangkat Pembelajaran Kurikulum Merdeka, serta Presensi Kegiatan.
+                            Pusat kolaborasi guru Prakarya dan Kewirausahaan SMA se-Kabupaten Sambas dalam berbagi Modul Ajar, Perangkat Pembelajaran Kurikulum Merdeka, serta Arsip Kegiatan (undangan, presensi, dan notulen).
                         </p>
                         <div class="mt-6 flex flex-wrap gap-3">
                             <button onclick="switchTab('hasilKerja')" class="px-4 py-2 bg-white text-brand-800 hover:bg-brand-50 font-semibold rounded-xl text-xs shadow transition">
@@ -311,13 +311,13 @@
 
                     <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Arsip Presensi</span>
+                            <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Arsip Kegiatan</span>
                             <div class="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center">
                                 <i class="fa-solid fa-file-pdf text-sm"></i>
                             </div>
                         </div>
                         <div class="mt-2 text-2xl font-bold text-slate-900 dark:text-white" id="statPresensiCount">0</div>
-                        <p class="text-[10px] text-slate-500 mt-1">Berkas Scan PDF Kehadiran</p>
+                        <p class="text-[10px] text-slate-500 mt-1">Undangan, Presensi &amp; Notulen</p>
                     </div>
                 </div>
             
@@ -622,17 +622,22 @@
                 <div id="dokumentasiGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
 
-            <!-- TAB 4: PRESENSI -->
+            <!-- TAB 4: ARSIP -->
             <div id="tab-daftarHadir" class="tab-content hidden space-y-6">
                 <div class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-700/60 pb-4">
                         <div>
-                            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Arsip Scan Daftar Hadir Pertemuan</h2>
-                            <p class="text-xs text-slate-500">Rekapitulasi berkas presensi fisik guru peserta MGMP.</p>
+                            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Arsip Kegiatan MGMP</h2>
+                            <p id="arsipSubtitle" class="text-xs text-slate-500">Dokumen kegiatan MGMP PKWU.</p>
                         </div>
                         <button id="btnAdminUploadPresensi" onclick="openPresensiModal('add')" class="hidden px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold rounded-xl shadow transition flex items-center shrink-0">
-                            <i class="fa-solid fa-file-arrow-up mr-1.5"></i> Tambah Arsip Presensi
+                            <i class="fa-solid fa-file-arrow-up mr-1.5"></i> <span id="arsipAddLabel">Tambah Arsip</span>
                         </button>
+                    </div>
+                    <div id="arsipTabs" class="flex flex-wrap gap-2" role="tablist">
+                        <button type="button" role="tab" data-jenis="undangan" onclick="setArsipJenis('undangan')" class="arsip-tab px-4 py-2 rounded-xl text-xs font-semibold transition"><i class="fa-solid fa-envelope-open-text mr-1.5"></i>Undangan Kegiatan <span class="arsip-count ml-1 opacity-70"></span></button>
+                        <button type="button" role="tab" data-jenis="presensi" onclick="setArsipJenis('presensi')" class="arsip-tab px-4 py-2 rounded-xl text-xs font-semibold transition"><i class="fa-solid fa-clipboard-user mr-1.5"></i>Presensi <span class="arsip-count ml-1 opacity-70"></span></button>
+                        <button type="button" role="tab" data-jenis="notulen" onclick="setArsipJenis('notulen')" class="arsip-tab px-4 py-2 rounded-xl text-xs font-semibold transition"><i class="fa-solid fa-file-pen mr-1.5"></i>Notulen Kegiatan <span class="arsip-count ml-1 opacity-70"></span></button>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs">
@@ -642,7 +647,7 @@
                                     <th class="p-3">Tanggal</th>
                                     <th class="p-3">Agenda Kegiatan</th>
                                     <th class="p-3">Lokasi</th>
-                                    <th class="p-3">Hadir</th>
+                                    <th id="thHadir" class="p-3">Hadir</th>
                                     <th class="p-3 text-center">Berkas PDF</th>
                                     <th id="thAksiPresensi" class="p-3 rounded-r-xl text-center hidden">Aksi</th>
                                 </tr>
@@ -650,6 +655,7 @@
                             <tbody id="daftarHadirTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
                         </table>
                     </div>
+                    <p id="arsipEmpty" class="hidden text-center text-xs text-slate-400 py-6">Belum ada berkas pada kategori ini.</p>
                 </div>
             </div>
 
@@ -927,6 +933,7 @@
             </div>
             <div class="space-y-3 text-xs">
                 <input type="hidden" id="presIdEdit">
+                <input type="hidden" id="presJenis" value="presensi">
                 <div>
                     <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Tanggal Pertemuan</label>
                     <input type="text" id="presDate" placeholder="Contoh: 12 Desember 2026" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
@@ -939,7 +946,7 @@
                     <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Lokasi Pelaksanaan</label>
                     <input type="text" id="presLocation" placeholder="Contoh: SMAN 1 Sambas" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
                 </div>
-                <div>
+                <div id="presAttendanceRow">
                     <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Jumlah Kehadiran</label>
                     <input type="text" id="presAttendance" placeholder="Contoh: 38/40 Guru" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none">
                 </div>
@@ -949,7 +956,7 @@
                 </div>
                 <div class="pt-3 flex justify-end space-x-2">
                     <button type="button" onclick="closePresensiModal()" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-medium">Batal</button>
-                    <button type="button" onclick="handlePresensiSubmit()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-semibold shadow">Simpan Presensi</button>
+                    <button type="button" onclick="handlePresensiSubmit()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-semibold shadow">Simpan</button>
                 </div>
             </div>
         </div>
@@ -1002,8 +1009,10 @@
             { id: 'a1', judul: 'Rapat Rutin Bulanan MGMP PKWU', tanggal: (() => { const d = new Date(); d.setDate(d.getDate() + 6); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); })(), waktu: '08.00 WIB - selesai', tempat: 'Aula SMAN 1 Sambas', deskripsi: 'Pembahasan perangkat ajar dan persiapan Festival Kewirausahaan Siswa.', posterData: '', posterUrl: '', infoLink: '', createdAt: 1 }
         ];
         let presensiData = USE_FIREBASE ? [] : [
-            { id: 1, date: "24 September 2026", title: "Pertemuan Rutin Bulanan", location: "Aula SMAN 1 Sambas", attendance: "38/40 Guru", pdfLink: "https://drive.google.com" },
-            { id: 2, date: "28 Agustus 2026", title: "Bimbingan Teknis Penyusunan Soal", location: "SMAN 2 Tebas", attendance: "40/40 Guru", pdfLink: "https://drive.google.com" }
+            { id: 1, jenis: "presensi", date: "24 September 2026", title: "Pertemuan Rutin Bulanan", location: "Aula SMAN 1 Sambas", attendance: "38/40 Guru", pdfLink: "https://drive.google.com" },
+            { id: 3, jenis: "undangan", date: "24 September 2026", title: "Undangan Pertemuan Rutin Bulanan", location: "Aula SMAN 1 Sambas", attendance: "", pdfLink: "https://drive.google.com" },
+            { id: 4, jenis: "notulen", date: "24 September 2026", title: "Notulen Pertemuan Rutin Bulanan", location: "Aula SMAN 1 Sambas", attendance: "", pdfLink: "https://drive.google.com" },
+            { id: 2, jenis: "presensi", date: "28 Agustus 2026", title: "Bimbingan Teknis Penyusunan Soal", location: "SMAN 2 Tebas", attendance: "40/40 Guru", pdfLink: "https://drive.google.com" }
         ];
 
 
@@ -1515,7 +1524,7 @@
         }
 
         const PROTECTED_TABS = ['hasilKerja', 'daftarHadir'];
-        const TAB_LABELS = { hasilKerja: 'Ruang Kolaborasi', daftarHadir: 'Presensi' };
+        const TAB_LABELS = { hasilKerja: 'Ruang Kolaborasi', daftarHadir: 'Arsip' };
         let pendingTab = null;
 
         function openLogin(message, tab) {
@@ -1876,40 +1885,66 @@
             if (confirm("Yakin ingin menghapus dokumentasi ini?")) await removeItem('dokumentasi', id);
         }
 
-        // ==================== RENDER & EDIT PRESENSI ====================
+        // ==================== ARSIP (undangan, presensi, notulen) ====================
+        const ARSIP = {
+            undangan: { label: 'Undangan Kegiatan', sub: 'Surat undangan kegiatan MGMP PKWU.', tambah: 'Tambah Undangan', hadir: false },
+            presensi: { label: 'Presensi', sub: 'Rekapitulasi berkas presensi fisik guru peserta MGMP.', tambah: 'Tambah Presensi', hadir: true },
+            notulen:  { label: 'Notulen Kegiatan', sub: 'Catatan hasil pembahasan setiap kegiatan MGMP.', tambah: 'Tambah Notulen', hadir: false }
+        };
+        let arsipJenis = 'presensi';
+        const jenisOf = (it) => ARSIP[it.jenis] ? it.jenis : 'presensi';   // data lama tanpa jenis = presensi
+        function setArsipJenis(j) { arsipJenis = ARSIP[j] ? j : 'presensi'; renderDaftarHadir(); }
+
         function renderDaftarHadir() {
             const tbody = document.getElementById('daftarHadirTableBody');
-            tbody.innerHTML = '';
-            presensiData.forEach((item, index) => {
-                let adminCol = '';
-                if (currentUser && currentUser.role === 'admin') {
-                    adminCol = `
+            if (!tbody) return;
+            const cfg = ARSIP[arsipJenis];
+            const isAdmin = currentUser && currentUser.role === 'admin';
+            document.querySelectorAll('#arsipTabs .arsip-tab').forEach(btn => {
+                const j = btn.dataset.jenis, on = j === arsipJenis;
+                btn.setAttribute('aria-selected', on);
+                btn.className = 'arsip-tab px-4 py-2 rounded-xl text-xs font-semibold transition ' + (on
+                    ? 'bg-brand-600 text-white shadow'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700');
+                btn.querySelector('.arsip-count').innerText = '(' + presensiData.filter(d => jenisOf(d) === j).length + ')';
+            });
+            document.getElementById('arsipSubtitle').innerText = cfg.sub;
+            document.getElementById('arsipAddLabel').innerText = cfg.tambah;
+            document.getElementById('thHadir').classList.toggle('hidden', !cfg.hadir);
+
+            const rows = presensiData.filter(d => jenisOf(d) === arsipJenis);
+            document.getElementById('arsipEmpty').classList.toggle('hidden', rows.length > 0);
+            tbody.innerHTML = rows.map((item, index) => {
+                const adminCol = isAdmin ? `
                         <td class="p-3 text-center space-x-1">
                             <button onclick="openPresensiModal('edit', '${esc(item.id)}')" class="px-2 py-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded text-[10px]"><i class="fa-solid fa-pen"></i></button>
                             <button onclick="deletePresensi('${esc(item.id)}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    `;
-                }
-
-                tbody.innerHTML += `
+                        </td>` : '';
+                const hadir = cfg.hadir ? `<td class="p-3">${item.attendance ? `<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-semibold">${esc(item.attendance)}</span>` : '-'}</td>` : '';
+                return `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                         <td class="p-3">${index + 1}</td>
                         <td class="p-3 font-semibold text-slate-900 dark:text-white">${esc(item.date)}</td>
                         <td class="p-3">${esc(item.title)}</td>
                         <td class="p-3">${esc(item.location)}</td>
-                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-semibold">${esc(item.attendance)}</span></td>
-                        <td class="p-3 text-center"><a href="${safeUrl(item.pdfLink)}" target="_blank" class="px-2.5 py-1 bg-red-50 text-red-600 rounded-lg text-[11px] font-medium"><i class="fa-solid fa-file-pdf mr-1"></i> PDF</a></td>
+                        ${hadir}
+                        <td class="p-3 text-center"><a href="${safeUrl(item.pdfLink)}" target="_blank" rel="noopener" class="px-2.5 py-1 bg-red-50 text-red-600 rounded-lg text-[11px] font-medium"><i class="fa-solid fa-file-pdf mr-1"></i> PDF</a></td>
                         ${adminCol}
-                    </tr>
-                `;
-            });
+                    </tr>`;
+            }).join('');
             document.getElementById('statPresensiCount').innerText = currentUser ? presensiData.length : '–';
         }
 
+        function applyJenisToModal(j) {
+            const cfg = ARSIP[j];
+            document.getElementById('presJenis').value = j;
+            document.getElementById('presAttendanceRow').classList.toggle('hidden', !cfg.hadir);
+        }
         function openPresensiModal(mode, id = null) {
             document.getElementById('presensiModal').classList.remove('hidden');
             if (mode === 'add') {
-                document.getElementById('presModalTitle').innerText = "Tambah Arsip Scan Presensi PDF";
+                applyJenisToModal(arsipJenis);
+                document.getElementById('presModalTitle').innerText = ARSIP[arsipJenis].tambah;
                 document.getElementById('presIdEdit').value = '';
                 document.getElementById('presDate').value = '';
                 document.getElementById('presTitle').value = '';
@@ -1917,15 +1952,16 @@
                 document.getElementById('presAttendance').value = '';
                 document.getElementById('presPdfLink').value = '';
             } else {
-                document.getElementById('presModalTitle').innerText = "Edit Arsip Presensi PDF";
                 const item = presensiData.find(d => sameId(d.id, id));
                 if (item) {
+                    applyJenisToModal(jenisOf(item));
+                    document.getElementById('presModalTitle').innerText = 'Edit ' + ARSIP[jenisOf(item)].label;
                     document.getElementById('presIdEdit').value = item.id;
-                    document.getElementById('presDate').value = item.date;
-                    document.getElementById('presTitle').value = item.title;
-                    document.getElementById('presLocation').value = item.location;
-                    document.getElementById('presAttendance').value = item.attendance;
-                    document.getElementById('presPdfLink').value = item.pdfLink;
+                    document.getElementById('presDate').value = item.date || '';
+                    document.getElementById('presTitle').value = item.title || '';
+                    document.getElementById('presLocation').value = item.location || '';
+                    document.getElementById('presAttendance').value = item.attendance || '';
+                    document.getElementById('presPdfLink').value = item.pdfLink || '';
                 }
             }
         }
@@ -1935,10 +1971,11 @@
         async function handlePresensiSubmit() {
             if (saving) return;
             const idEdit = document.getElementById('presIdEdit').value;
+            const jenis = document.getElementById('presJenis').value || 'presensi';
             const date = document.getElementById('presDate').value.trim();
             const title = document.getElementById('presTitle').value.trim();
             const location = document.getElementById('presLocation').value.trim();
-            const attendance = document.getElementById('presAttendance').value.trim();
+            const attendance = ARSIP[jenis].hadir ? document.getElementById('presAttendance').value.trim() : '';
             const pdfLink = document.getElementById('presPdfLink').value.trim();
 
             if (!date || !title || !pdfLink) {
@@ -1948,15 +1985,15 @@
 
             const existing = idEdit ? presensiData.find(d => sameId(d.id, idEdit)) : null;
             const item = existing
-                ? { ...existing, date, title, location, attendance, pdfLink }
-                : { id: newId(), date, title, location, attendance, pdfLink, createdAt: Date.now() };
+                ? { ...existing, jenis, date, title, location, attendance, pdfLink }
+                : { id: newId(), jenis, date, title, location, attendance, pdfLink, createdAt: Date.now() };
 
             saving = true;
             try { if (await saveItem('presensi', item)) closePresensiModal(); } finally { saving = false; }
         }
 
         async function deletePresensi(id) {
-            if (confirm("Yakin ingin menghapus arsip presensi ini?")) await removeItem('presensi', id);
+            if (confirm("Yakin ingin menghapus berkas arsip ini?")) await removeItem('presensi', id);
         }
 
         // ==================== RENDER ANGGOTA & DIREKTORI ====================
