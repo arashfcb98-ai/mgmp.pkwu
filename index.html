@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard MGMP PKWU - Kab. Sambas</title>
+    <title>MGMP PKWU Kab. Sambas</title>
+    <meta name="description" content="Portal resmi MGMP Prakarya dan Kewirausahaan SMA Kabupaten Sambas: agenda kegiatan, ruang kolaborasi guru, dokumentasi, dan arsip.">
+    <meta name="theme-color" content="#1f4d2e">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="MGMP PKWU Kab. Sambas">
+    <meta property="og:title" content="MGMP PKWU SMA Kabupaten Sambas">
+    <meta property="og:description" content="Agenda kegiatan, ruang kolaborasi guru, dokumentasi, dan arsip MGMP Prakarya dan Kewirausahaan.">
+    <meta property="og:image" content="https://mgmppkwu.vercel.app/logo.jpg">
+    <meta property="og:url" content="https://mgmppkwu.vercel.app/">
+    <meta name="twitter:card" content="summary">
     <link rel="icon" type="image/jpeg" id="favicon">
     
     <!-- Tailwind CSS CDN -->
@@ -213,24 +222,25 @@
                 </div>
             </div>
 
-            <!-- Mobile Navbar -->
-            <div class="md:hidden border-t border-slate-200 dark:border-slate-800 px-2 py-2 flex justify-around overflow-x-auto text-xs">
-                <button onclick="switchTab('dashboard')" id="mobile-nav-dashboard" class="mobile-nav-btn px-2 py-1 font-medium">Beranda</button>
-                <button onclick="switchTab('profil')" id="mobile-nav-profil" class="mobile-nav-btn px-2 py-1 font-medium">Profil</button>
-                <button onclick="switchTab('hasilKerja')" id="mobile-nav-hasilKerja" class="mobile-nav-btn px-2 py-1 font-medium whitespace-nowrap">Kolaborasi<i class="fa-solid fa-lock lock-icon text-[9px] ml-1 opacity-60"></i></button>
-                <button onclick="switchTab('dokumentasi')" id="mobile-nav-dokumentasi" class="mobile-nav-btn px-2 py-1 font-medium">Galeri</button>
-                <button onclick="switchTab('daftarHadir')" id="mobile-nav-daftarHadir" class="mobile-nav-btn px-2 py-1 font-medium">Arsip<i class="fa-solid fa-lock lock-icon text-[9px] ml-1 opacity-60"></i></button>
-                <button onclick="switchTab('direktori')" id="mobile-nav-direktori" class="mobile-nav-btn px-2 py-1 font-medium">Anggota</button>
-                <button onclick="switchTab('userManagement')" id="mobile-nav-userManagement" class="mobile-nav-btn px-2 py-1 font-medium hidden text-amber-600">User</button>
-            </div>
         </header>
 
+        <!-- Navigasi bawah (HP) -->
+        <nav id="mobileNav" class="md:hidden fixed bottom-0 inset-x-0 z-40 flex bg-white/95 dark:bg-slate-900/95 backdrop-blur border-t border-slate-200 dark:border-slate-800 pb-[env(safe-area-inset-bottom)]" aria-label="Menu utama">
+                <button onclick="switchTab('dashboard')" id="mobile-nav-dashboard" class="mobile-nav-btn relative flex-1 min-w-0 flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium text-slate-500 dark:text-slate-400"><i class="fa-solid fa-house text-base"></i><span class="truncate max-w-full">Beranda</span></button>
+                <button onclick="switchTab('profil')" id="mobile-nav-profil" class="mobile-nav-btn relative flex-1 min-w-0 flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium text-slate-500 dark:text-slate-400"><i class="fa-solid fa-bullseye text-base"></i><span class="truncate max-w-full">Visi & Misi</span></button>
+                <button onclick="switchTab('hasilKerja')" id="mobile-nav-hasilKerja" class="mobile-nav-btn relative flex-1 min-w-0 flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium text-slate-500 dark:text-slate-400"><i class="fa-solid fa-folder-open text-base"></i><span class="truncate max-w-full">Kolaborasi</span><i class="fa-solid fa-lock lock-icon absolute top-1 right-[22%] text-[8px] opacity-60"></i></button>
+                <button onclick="switchTab('dokumentasi')" id="mobile-nav-dokumentasi" class="mobile-nav-btn relative flex-1 min-w-0 flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium text-slate-500 dark:text-slate-400"><i class="fa-solid fa-images text-base"></i><span class="truncate max-w-full">Dokumentasi</span></button>
+                <button onclick="switchTab('daftarHadir')" id="mobile-nav-daftarHadir" class="mobile-nav-btn relative flex-1 min-w-0 flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium text-slate-500 dark:text-slate-400"><i class="fa-solid fa-box-archive text-base"></i><span class="truncate max-w-full">Arsip</span><i class="fa-solid fa-lock lock-icon absolute top-1 right-[22%] text-[8px] opacity-60"></i></button>
+                <button onclick="switchTab('direktori')" id="mobile-nav-direktori" class="mobile-nav-btn relative flex-1 min-w-0 flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium text-slate-500 dark:text-slate-400"><i class="fa-solid fa-users text-base"></i><span class="truncate max-w-full">Anggota</span></button>
+                <button onclick="switchTab('userManagement')" id="mobile-nav-userManagement" class="mobile-nav-btn relative flex-1 min-w-0 hidden flex-col items-center gap-0.5 py-2 text-[10px] font-medium text-amber-600"><i class="fa-solid fa-user-gear text-base"></i><span class="truncate max-w-full">User</span></button>
+        </nav>
+
         <!-- Main Workspace -->
-        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 md:pb-6 space-y-6">
 
             <!-- TAB 1: BERANDA -->
             <div id="tab-dashboard" class="tab-content space-y-6">
-                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-900 via-brand-800 to-brand-700 text-white p-6 sm:p-8 shadow-xl">
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-900 via-brand-800 to-brand-700 text-white p-5 sm:p-6 shadow-xl">
                     <div class="absolute bottom-0 inset-x-0 h-1.5 bg-gradient-to-r from-gold-400 via-gold-500 to-gold-600"></div>
                     <div class="relative z-10 max-w-2xl">
                         <span class="px-3 py-1 bg-gold-400 text-brand-900 rounded-full text-xs font-bold tracking-wide uppercase">Kabupaten Sambas, Kalimantan Barat</span>
@@ -260,7 +270,7 @@
                 <section id="agendaSection" class="space-y-4" aria-labelledby="agendaTitle">
                     <div class="flex items-center justify-between gap-3">
                         <div>
-                            <h2 id="agendaTitle" class="text-lg font-bold text-slate-900 dark:text-white"><i class="fa-solid fa-bullhorn text-gold-600 mr-2"></i>Agenda &amp; Pengumuman</h2>
+                            <h2 id="agendaTitle" class="text-lg font-bold text-slate-900 dark:text-white"><i class="fa-solid fa-bullhorn text-gold-600 mr-2 inline-block w-5 text-center"></i>Agenda &amp; Pengumuman</h2>
                             <p class="text-xs text-slate-500 dark:text-slate-400">Kegiatan MGMP PKWU yang akan datang. Klik poster untuk memperbesar.</p>
                         </div>
                         <button id="btnAdminAddAgenda" onclick="openAgendaModal('add')" class="hidden shrink-0 px-4 py-2 bg-gold-400 hover:bg-gold-500 text-brand-900 text-xs font-bold rounded-xl shadow transition items-center">
@@ -1277,7 +1287,7 @@
             return item.posterUrl ? safeUrl(imgSrc(item.posterUrl)) : '';
         }
 
-        function agendaCard(item, past) {
+        function agendaCard(item, past, featured) {
             const isAdmin = currentUser && currentUser.role === 'admin';
             const n = daysUntil(item.tanggal);
             let badge;
@@ -1288,7 +1298,7 @@
 
             const src = posterSrc(item);
             const poster = src ? `
-                <button type="button" onclick="openPoster('${esc(item.id)}')" class="relative shrink-0 w-32 sm:w-40 bg-slate-100 dark:bg-slate-800 overflow-hidden group" aria-label="Perbesar poster ${esc(item.judul)}">
+                <button type="button" onclick="openPoster('${esc(item.id)}')" class="relative shrink-0 ${featured ? 'w-36 sm:w-60' : 'w-32 sm:w-40'} bg-slate-100 dark:bg-slate-800 overflow-hidden group" aria-label="Perbesar poster ${esc(item.judul)}">
                     <img src="${esc(src)}" alt="Poster ${esc(item.judul)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                     <span class="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded bg-black/55 text-white text-[9px]"><i class="fa-solid fa-magnifying-glass-plus"></i></span>
                 </button>` : '';
@@ -1302,12 +1312,12 @@
             const info = item.infoLink ? `<a href="${safeUrl(item.infoLink)}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 mt-1 px-3 py-1.5 bg-brand-500 hover:bg-brand-600 text-white font-medium rounded-lg text-[11px] shadow-sm transition"><i class="fa-solid fa-arrow-up-right-from-square"></i> Info / Pendaftaran</a>` : '';
 
             return `
-                <article class="glass-card rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex ${past ? 'opacity-75' : ''}">
+                <article class="glass-card rounded-2xl shadow-sm overflow-hidden flex ${past ? 'opacity-75' : ''} ${featured ? 'lg:col-span-2 border-2 border-gold-400 ring-4 ring-gold-400/15' : 'border border-slate-200 dark:border-slate-800'}">
                     ${poster}
-                    <div class="p-4 flex-1 min-w-0 space-y-1.5">
-                        <div>${badge}</div>
-                        <h3 class="font-heading font-bold text-slate-900 dark:text-white text-sm sm:text-base leading-snug break-words">${esc(item.judul)}</h3>
-                        <div class="text-[11px] text-slate-600 dark:text-slate-300 space-y-0.5">
+                    <div class="${featured ? 'p-4 sm:p-6' : 'p-4'} flex-1 min-w-0 space-y-1.5">
+                        <div class="flex items-center gap-2">${badge}${featured ? '<span class="text-[10px] font-bold uppercase tracking-widest text-gold-700 dark:text-gold-400">Agenda terdekat</span>' : ''}</div>
+                        <h3 class="font-heading font-bold text-slate-900 dark:text-white ${featured ? 'text-base sm:text-xl' : 'text-sm sm:text-base'} leading-snug break-words">${esc(item.judul)}</h3>
+                        <div class="${featured ? 'text-xs' : 'text-[11px]'} text-slate-600 dark:text-slate-300 space-y-0.5">
                             <p><i class="fa-regular fa-calendar w-4 text-gold-600"></i> ${esc(fmtTanggal(item.tanggal))}</p>
                             ${item.waktu ? `<p><i class="fa-regular fa-clock w-4 text-gold-600"></i> ${esc(item.waktu)}</p>` : ''}
                             ${item.tempat ? `<p><i class="fa-solid fa-location-dot w-4 text-gold-600"></i> ${esc(item.tempat)}</p>` : ''}
@@ -1327,7 +1337,7 @@
             const past = agendaData.filter(a => a.tanggal < today).sort((a, b) => b.tanggal.localeCompare(a.tanggal));
 
             list.innerHTML = upcoming.length
-                ? upcoming.map(a => agendaCard(a, false)).join('')
+                ? upcoming.map((a, i) => agendaCard(a, false, i === 0)).join('')
                 : `<div class="lg:col-span-2 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-6 text-center text-xs text-slate-500 dark:text-slate-400">
                        <i class="fa-regular fa-calendar-check text-2xl text-gold-600 mb-2 block"></i>
                        Belum ada agenda mendatang. Pantau terus halaman ini.
@@ -1645,6 +1655,7 @@
             ['btnAdminUploadBanner', 'btnAdminUploadHasil', 'btnAdminUploadDok', 'btnAdminUploadPresensi',
              'btnAdminAddAnggota', 'btnAdminAddAgenda', 'nav-userManagement', 'mobile-nav-userManagement', 'thAksiPresensi']
                 .forEach(id => show(id, isAdmin));
+            document.getElementById('mobile-nav-userManagement')?.classList.toggle('flex', isAdmin);
 
             renderHasilKerja();
             renderDokumentasi();
@@ -1693,12 +1704,12 @@
             }
             if (tabName === 'userManagement' && !(currentUser && currentUser.role === 'admin')) return;
             document.querySelectorAll('.mobile-nav-btn').forEach(b => {
-                b.classList.add('border-b-2');
                 const on = b.id === `mobile-nav-${tabName}`;
-                b.classList.toggle('border-gold-500', on);
-                b.classList.toggle('border-transparent', !on);
                 b.classList.toggle('text-brand-700', on);
+                b.classList.toggle('dark:text-gold-400', on);
                 b.classList.toggle('font-bold', on);
+                b.classList.toggle('bg-brand-50', on);
+                b.classList.toggle('text-slate-500', !on && b.id !== 'mobile-nav-userManagement');
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -1714,6 +1725,8 @@
             if (activeNav && !tabName.includes('userManagement')) {
                 activeNav.classList.add('bg-brand-500', 'text-white', 'shadow-sm');
             }
+            const TITLES = { dashboard: 'Beranda', profil: 'Visi & Misi', hasilKerja: 'Ruang Kolaborasi', dokumentasi: 'Dokumentasi', daftarHadir: 'Arsip', direktori: 'Anggota', userManagement: 'Manajemen User' };
+            document.title = (tabName === 'dashboard' ? '' : TITLES[tabName] + ' · ') + 'MGMP PKWU Kab. Sambas';
             if (!opts.noHash) syncHash(!!opts.replace);
         }
 
@@ -1760,7 +1773,7 @@
                 `;
                 grid.appendChild(card);
             });
-            document.getElementById('statModulCount').innerText = currentUser ? hasilKerjaData.length : '–';
+            document.getElementById('statModulCount').innerHTML = currentUser ? hasilKerjaData.length : '<span class="text-sm font-semibold text-slate-400"><i class="fa-solid fa-lock text-xs mr-1.5"></i>Khusus anggota</span>';
         }
 
         function setCategoryFilter(cat) {
@@ -1959,7 +1972,7 @@
                         ${adminCol}
                     </tr>`;
             }).join('');
-            document.getElementById('statPresensiCount').innerText = currentUser ? presensiData.length : '–';
+            document.getElementById('statPresensiCount').innerHTML = currentUser ? presensiData.length : '<span class="text-sm font-semibold text-slate-400"><i class="fa-solid fa-lock text-xs mr-1.5"></i>Khusus anggota</span>';
         }
 
         function applyJenisToModal(j) {
